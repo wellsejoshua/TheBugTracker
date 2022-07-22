@@ -6,7 +6,7 @@ using TheBugTracker.Models;
 
 namespace TheBugTracker.Services.Interfaces
 {
-    interface IBTProjectService
+    public interface IBTProjectService
     {
         public Task AddNewProjectAsync(Project project);
 
