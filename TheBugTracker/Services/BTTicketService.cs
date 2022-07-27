@@ -100,7 +100,7 @@ namespace TheBugTracker.Services
                                                         .Include(t => t.History)
                                                         .Include(t => t.TicketType)
                                                         .Include(t => t.Project)
-                                                        .ToListAsync();
+                                                     .ToListAsync();
                 return tickets;
 
 
