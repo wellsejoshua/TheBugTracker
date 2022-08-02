@@ -56,6 +56,7 @@ namespace TheBugTracker
             services.AddScoped<IBTNotificationService, BTNotificationService>();
             services.AddScoped<IBTInviteService, BTInviteService>();
             services.AddScoped<IBTFileService, BTFileService>();
+            services.AddScoped<IBTLookupService, BTLookupService>();
 
             //Register a preconfigured instance of the mail settings class
             services.AddScoped<IEmailSender, BTEmailService>();
