@@ -14,7 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label class="control-label">Choose a priority</label>
-                <select asp-for="ProjectPriority" class="form-control" asp-items="Model.PriorityList"></select>
+                <select asp-for="Project.ProjectPriorityId" class="form-control" asp-items="Model.PriorityList"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Project.Name" class="control-label"></label>
