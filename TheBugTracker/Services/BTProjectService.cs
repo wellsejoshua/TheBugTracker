@@ -32,6 +32,9 @@ namespace TheBugTracker.Services
         public async Task<bool> AddProjectManagerAsync(string userId, int projectId)
         {
             BTUser currentPM = await GetProjectManagerAsync(projectId);
+            BTUser newPM = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            Project project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == projectId);
+            
             //Remove Current PM if necessary
             if (currentPM != null)
             {
@@ -49,7 +52,9 @@ namespace TheBugTracker.Services
             //Add the new PM
             try
             {
-                await AddProjectManagerAsync(userId, projectId);
+                //created infinite loop
+                //await AddProjectManagerAsync(userId, projectId);
+                project.Members.Add(newPM);
                 return true;
 
 
