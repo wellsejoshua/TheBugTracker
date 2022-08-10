@@ -64,7 +64,11 @@
                 @Html.DisplayFor(modelItem => item.ImageFileName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ImageFileData)
+                <!-- Html.DisplayFor(modelItem => item.ImageFileData)  -->
+                @if (item.ImageFileData != null)
+                {
+                <img style="width:60px;height:60px" src="data:image/*;base64,@(Convert.ToBase64String(item.ImageFileData))" alt="Missing Image" />
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ImageFileContentType)
@@ -76,12 +80,22 @@
                 @Html.DisplayFor(modelItem => item.Company.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProjectPriority.Id)
+                @Html.DisplayFor(modelItem => item.ProjectPriority.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <!--razor syntax runs on server-->
+                @if (item.Archived)
+                {
+                    <a asp-action="Restore" asp-route-id="@item.Id">Restore</a>
+
+                }
+                else
+                {
+                    <a asp-action="Archive" asp-route-id="@item.Id">Archive</a>
+                }
+
             </td>
         </tr>
 }
