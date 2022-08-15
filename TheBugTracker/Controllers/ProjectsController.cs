@@ -64,13 +64,15 @@ namespace TheBugTracker.Controllers
             List<Project> projects = new();
             int companyId = User.Identity.GetCompanyId().Value;
 
+
+
             if(User.IsInRole(nameof(Roles.Admin)) || User.IsInRole(nameof(Roles.ProjectManager)))
             {
                 projects = await _companyInfoService.GetAllProjectsAsync(companyId);
             }
             else
             {
-               // projects = await _projectService.GetAllProjectsByCompany
+                projects = await _projectService.GetAllProjectsByCompanyAsync(companyId);
             }
 
             return View(projects);
