@@ -12,7 +12,7 @@ namespace TheBugTracker.Models
 {
     public class BTUser : IdentityUser
     {
-        public int? CompanyId { get; set; }
+        public int CompanyId { get; set; }
 
         [Required]
         [Display(Name = "First Name")]
