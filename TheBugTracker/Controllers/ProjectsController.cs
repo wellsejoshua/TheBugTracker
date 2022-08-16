@@ -43,12 +43,15 @@ namespace TheBugTracker.Controllers
         }
 
         // GET: Projects
+        #region Index
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Projects.Include(p => p.Company).Include(p => p.ProjectPriority);
             return View(await applicationDbContext.ToListAsync());
         }
+        #endregion
 
+        #region My Projects
         public async Task<IActionResult> MyProjects()
         {
             string userId = _userManager.GetUserId(User);
@@ -58,6 +61,9 @@ namespace TheBugTracker.Controllers
             return View(projects);
         }
 
+        #endregion
+
+        #region All Projects
         public async Task<IActionResult> AllProjects()
         {
 
@@ -66,7 +72,7 @@ namespace TheBugTracker.Controllers
 
 
 
-            if(User.IsInRole(nameof(Roles.Admin)) || User.IsInRole(nameof(Roles.ProjectManager)))
+            if (User.IsInRole(nameof(Roles.Admin)) || User.IsInRole(nameof(Roles.ProjectManager)))
             {
                 projects = await _companyInfoService.GetAllProjectsAsync(companyId);
             }
@@ -78,6 +84,19 @@ namespace TheBugTracker.Controllers
             return View(projects);
         }
 
+        #endregion
+
+        #region Archived Projects
+        public async Task<IActionResult> ArchivedProjects()
+        {
+            int companyId = User.Identity.GetCompanyId().Value;
+
+            List<Project> projects = await _projectService.GetArchivedProjectsByCompanyAsync(companyId);
+
+            return View(projects);
+        }
+
+        #endregion
         // GET: Projects/Details/5
         public async Task<IActionResult> Details(int? id)
         {

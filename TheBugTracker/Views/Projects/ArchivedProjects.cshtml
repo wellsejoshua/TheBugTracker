@@ -1,19 +1,18 @@
 ﻿@model IEnumerable<TheBugTracker.Models.Project>
 @using TheBugTracker.Models.Enums
+@using Microsoft.AspNetCore.Identity
+@using TheBugTracker.Services.Interfaces
+
+@inject UserManager<BTUser> UserManager
+@inject IBTProjectService ProjectService
 
 @{
-    ViewData["Title"] = "My Projects";
+    ViewData["Title"] = "Archived Projects";
+    //gets all user information
+    BTUser btUser = await UserManager.GetUserAsync(User);
 }
 
-<h1>My Projects</h1>
-
-@if (User.IsInRole(nameof(Roles.Admin)) || User.IsInRole(nameof(Roles.Admin)))
-{
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-}
-
+<h1>Archived Projects</h1>
 <table class="table">
     <thead>
         <tr>
@@ -91,19 +90,19 @@
                 <td>
 
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    @if (User.IsInRole(nameof(Roles.Admin)) || User.IsInRole(nameof(Roles.ProjectManager)))
+
+                    <!--inside of parenthesis because we have an awaited call that we need the result of in order to complete comparison
+        checks to see if the user is the project manager on this particular project-->
+                    @{
+                        bool isProjectPM = (await ProjectService.GetProjectManagerAsync(item.Id))?.Id == btUser.Id;
+
+                    }
+
+                    <!--razor syntax runs on server-->
+                    @if (User.IsInRole(nameof(Roles.Admin)) || isProjectPM)
                     {
                         <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                        <!--razor syntax runs on server-->
-                        @if (item.Archived)
-                        {
-                            <a asp-action="Restore" asp-route-id="@item.Id">Restore</a>
-
-                        }
-                        else
-                        {
-                            <a asp-action="Archive" asp-route-id="@item.Id">Archive</a>
-                        }
+                        <a asp-action="Restore" asp-route-id="@item.Id">Restore</a>
                     }
                 </td>
             </tr>
