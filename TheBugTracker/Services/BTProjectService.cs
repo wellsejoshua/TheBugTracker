@@ -33,6 +33,7 @@ namespace TheBugTracker.Services
         }
         #endregion
 
+        #region Add Project Manager Async
         public async Task<bool> AddProjectManagerAsync(string userId, int projectId)
         {
             BTUser currentPM = await GetProjectManagerAsync(projectId);
@@ -67,6 +68,8 @@ namespace TheBugTracker.Services
             }
 
         }
+
+        #endregion
 
         #region Add User To Project
         public async Task<bool> AddUserToProjectAsync(string userId, int projectId)
@@ -218,15 +221,27 @@ namespace TheBugTracker.Services
             throw new NotImplementedException();
         }
         //CRUD - READ
+        #region Get Project By Id
         public async Task<Project> GetProjectByIdAsync(int projectId, int companyId)
         {
             Project project = await _context.Projects
                                             .Include(p => p.Tickets)
+                                                .ThenInclude(t => t.TicketPriority)
+                                            .Include(p => p.Tickets)
+                                                .ThenInclude(t => t.TicketStatus)
+                                            .Include(p => p.Tickets)
+                                                .ThenInclude(t => t.TicketType)
+                                            .Include(p => p.Tickets)
+                                                .ThenInclude(t => t.DeveloperUser)
+                                            .Include(p => p.Tickets)
+                                                .ThenInclude(t => t.OwnerUser)
                                             .Include(p => p.Members)
                                             .Include(p => p.ProjectPriority)
                                             .FirstOrDefaultAsync(p => p.Id == projectId && p.CompanyId == companyId);
             return project;
         }
+
+        #endregion
 
         public async Task<BTUser> GetProjectManagerAsync(int projectId)
         {
