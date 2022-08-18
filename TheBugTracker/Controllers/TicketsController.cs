@@ -34,12 +34,16 @@ namespace TheBugTracker.Controllers
         }
 
         // GET: Tickets
+        #region Index
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Tickets.Include(t => t.DeveloperUser).Include(t => t.OwnerUser).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
             return View(await applicationDbContext.ToListAsync());
         }
 
+        #endregion
+
+        #region My Tickets
         //Method for displaying My Tickets
         public async Task<IActionResult> MyTickets()
         {
@@ -48,7 +52,9 @@ namespace TheBugTracker.Controllers
 
             return View(tickets);
         }
+        #endregion
 
+        #region All Tickets
         //Method for displaying My Tickets
         public async Task<IActionResult> AllTickets()
         {
@@ -67,7 +73,9 @@ namespace TheBugTracker.Controllers
             }
 
         }
+        #endregion
 
+        #region Archived Tickets
         public async Task<IActionResult> ArchivedTickets()
         {
             int companyId = User.Identity.GetCompanyId().Value;
@@ -75,6 +83,7 @@ namespace TheBugTracker.Controllers
             return View(tickets);
         }
 
+        #endregion
 
         // GET: Tickets/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -84,14 +93,8 @@ namespace TheBugTracker.Controllers
                 return NotFound();
             }
 
-            var ticket = await _context.Tickets
-                .Include(t => t.DeveloperUser)
-                .Include(t => t.OwnerUser)
-                .Include(t => t.Project)
-                .Include(t => t.TicketPriority)
-                .Include(t => t.TicketStatus)
-                .Include(t => t.TicketType)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Ticket ticket = await _ticketService.GetTicketByIdAsync(id.Value);
+
             if (ticket == null)
             {
                 return NotFound();
@@ -239,6 +242,8 @@ namespace TheBugTracker.Controllers
         }
 
         #endregion
+
+        #region Archive
         // GET: Tickets/Archive/5
         public async Task<IActionResult> Archive(int? id)
         {
@@ -263,7 +268,9 @@ namespace TheBugTracker.Controllers
 
             return View(ticket);
         }
+        #endregion
 
+        #region Archive Confirmed
         // POST: Tickets/Archive/5
         [HttpPost, ActionName("Archive")]
         [ValidateAntiForgeryToken]
@@ -274,8 +281,9 @@ namespace TheBugTracker.Controllers
             await _ticketService.UpdateTicketAsync(ticket);
             return RedirectToAction(nameof(Index));
         }
+        #endregion
 
-
+        #region Restore
         // GET: Tickets/Restore/5
         public async Task<IActionResult> Restore(int? id)
         {
@@ -300,7 +308,9 @@ namespace TheBugTracker.Controllers
 
             return View(ticket);
         }
+        #endregion
 
+        #region Restore Confirmed
         // POST: Tickets/Restore/5
         [HttpPost, ActionName("Restore")]
         [ValidateAntiForgeryToken]
@@ -311,14 +321,14 @@ namespace TheBugTracker.Controllers
             await _ticketService.UpdateTicketAsync(ticket);
             return RedirectToAction(nameof(Index));
         }
+        #endregion
 
-
-
-
+        #region Ticket Exists
         private async Task<bool> TicketExists(int id)
         {
             int companyId = User.Identity.GetCompanyId().Value;
-            return ( await _ticketService.GetAllTicketsByCompanyAsync(companyId)).Any(t=>t.Id == id);
-        }
+            return (await _ticketService.GetAllTicketsByCompanyAsync(companyId)).Any(t => t.Id == id);
+        } 
+        #endregion
     }
 }
