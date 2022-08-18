@@ -85,6 +85,7 @@ namespace TheBugTracker.Controllers
 
         #endregion
 
+        #region Details
         // GET: Tickets/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -101,7 +102,8 @@ namespace TheBugTracker.Controllers
             }
 
             return View(ticket);
-        }
+        } 
+        #endregion
 
         // GET: Tickets/Create
         #region Create Get
@@ -128,9 +130,11 @@ namespace TheBugTracker.Controllers
         }
 
         #endregion
+
         // POST: Tickets/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         #region Create Post
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -241,6 +245,31 @@ namespace TheBugTracker.Controllers
             return View(ticket);
         }
 
+        #endregion
+
+        #region Add Ticket Comment
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddTicketComment([Bind("Id,TicketId,Comment")] TicketComment ticketComment)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    ticketComment.UserId = _userManager.GetUserId(User);
+                    ticketComment.Created = DateTimeOffset.Now;
+
+                    await _ticketService.AddTicketCommentAsync(ticketComment);
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+
+            return RedirectToAction("Details", new { id = ticketComment.TicketId });
+        }
         #endregion
 
         #region Archive
