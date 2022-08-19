@@ -11,9 +11,12 @@ namespace TheBugTracker.Services
     public class BTFileService : IBTFileService
     {
 
+        #region Variables
         private readonly string[] suffixes = { "Bytes", "KB", "MB", "GB", "TB", "PB" };
 
+        #endregion
 
+        #region Convert Byte Array To File
         public string ConvertByteArrayToFile(byte[] fileData, string extension)
         {
             try
@@ -28,6 +31,10 @@ namespace TheBugTracker.Services
             }
         }
 
+        #endregion
+
+
+        #region Convert File To Byte Array
         public async Task<byte[]> ConvertFileToByteArrayAsync(IFormFile file)
         {
             try
@@ -41,7 +48,7 @@ namespace TheBugTracker.Services
                 memoryStream.Dispose();
 
                 return byteFile;
-                
+
             }
             catch (Exception)
             {
@@ -50,11 +57,14 @@ namespace TheBugTracker.Services
             }
         }
 
+        #endregion
+
+        #region Format File Size
         public string FormatFileSize(long bytes)
         {
             int counter = 0;
             decimal fileSize = bytes;
-            while (Math.Round(fileSize / 1024) >= 1 )
+            while (Math.Round(fileSize / 1024) >= 1)
             {
                 fileSize /= bytes;
                 counter++;
@@ -63,6 +73,9 @@ namespace TheBugTracker.Services
             return string.Format("{}0:n1{1}", fileSize, suffixes[counter]);
         }
 
+        #endregion
+
+        #region Get File Icon
         public string GetFileIcon(string file)
         {
             string fileImage = "default";
@@ -74,5 +87,7 @@ namespace TheBugTracker.Services
             }
             return fileImage;
         }
+
+        #endregion
     }
 }

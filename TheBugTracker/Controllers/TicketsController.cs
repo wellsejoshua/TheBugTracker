@@ -16,22 +16,27 @@ namespace TheBugTracker.Controllers
 {
     public class TicketsController : Controller
     {
+
+        #region Private Variables and Injections
         private readonly ApplicationDbContext _context;
         private readonly UserManager<BTUser> _userManager;
         private readonly IBTProjectService _projectService;
         private readonly IBTLookupService _lookupService;
-        private readonly IBTTicketService _ticketService;
+        private readonly IBTTicketService _ticketService;  
+        #endregion
 
+        #region Constructor
         public TicketsController(ApplicationDbContext context,
-                                 UserManager<BTUser> userManager,
-                                 IBTProjectService projectService, IBTLookupService lookupService, IBTTicketService ticketService)
+                         UserManager<BTUser> userManager,
+                         IBTProjectService projectService, IBTLookupService lookupService, IBTTicketService ticketService)
         {
             _context = context;
             _userManager = userManager;
             _projectService = projectService;
             _lookupService = lookupService;
             _ticketService = ticketService;
-        }
+        } 
+        #endregion
 
         // GET: Tickets
         #region Index
