@@ -22,7 +22,9 @@ namespace TheBugTracker.Services
             try
             {
                 string imageBase64Data = Convert.ToBase64String(fileData);
-                return string.Format($"data:{extension};base64,{imageBase64Data}");
+               // return string.Format($"data:{extension};base64,{imageBase64Data}");
+                return string.Format($"data:image/{extension};base64,{imageBase64Data}");
+
             }
             catch (Exception)
             {
@@ -70,7 +72,7 @@ namespace TheBugTracker.Services
                 counter++;
             }
             //formats with one decimal place
-            return string.Format("{}0:n1{1}", fileSize, suffixes[counter]);
+            return string.Format("{0:n1}{1}", fileSize, suffixes[counter]);
         }
 
         #endregion
@@ -83,7 +85,8 @@ namespace TheBugTracker.Services
             if (!string.IsNullOrWhiteSpace(file))
             {
                 fileImage = Path.GetExtension(file).Replace(".", "");
-                return $"/img/png{fileImage}.png";
+                //return $"/img/contenttype{fileImage}.png";
+                return $"/img/contenttype/{fileImage}.png";
             }
             return fileImage;
         }
