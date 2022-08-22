@@ -17,6 +17,7 @@ namespace TheBugTracker.Controllers
 {
     public class ProjectsController : Controller
     {
+        #region Properties
         private readonly ApplicationDbContext _context;
         private readonly IBTRolesService _rolesService;
         private readonly IBTLookupService _lookupService;
@@ -24,14 +25,16 @@ namespace TheBugTracker.Controllers
         private readonly IBTProjectService _projectService;
         private readonly IBTCompanyInfoService _companyInfoService;
         private readonly UserManager<BTUser> _userManager;
+        #endregion
 
+        #region Constructor
         public ProjectsController(ApplicationDbContext context,
-                                     IBTRolesService rolesService, 
-                                     IBTLookupService lookupService,
-                                     IBTFileService fileService, 
-                                     IBTProjectService projectService,
-                                     IBTCompanyInfoService companyInfoService,
-                                     UserManager<BTUser> userManager)
+                             IBTRolesService rolesService,
+                             IBTLookupService lookupService,
+                             IBTFileService fileService,
+                             IBTProjectService projectService,
+                             IBTCompanyInfoService companyInfoService,
+                             UserManager<BTUser> userManager)
         {
             _context = context;
             _rolesService = rolesService;
@@ -40,7 +43,8 @@ namespace TheBugTracker.Controllers
             _projectService = projectService;
             _companyInfoService = companyInfoService;
             _userManager = userManager;
-        }
+        } 
+        #endregion
 
         // GET: Projects
         #region Index
@@ -165,7 +169,6 @@ namespace TheBugTracker.Controllers
 
         }
         #endregion
-
 
         #region Assign Members Post
         [HttpPost]
