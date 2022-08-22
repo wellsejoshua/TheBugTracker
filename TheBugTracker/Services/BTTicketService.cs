@@ -360,6 +360,29 @@ namespace TheBugTracker.Services
 
         #endregion
 
+        #region Get Ticket As No Tracking
+        public async Task<Ticket> GetTicketAsNoTrackingAsync(int ticketId)
+        {
+            try
+            {
+                return await _context.Tickets
+                    .Include(t => t.DeveloperUser)
+                    .Include(t => t.Project)
+                    .Include(t => t.TicketPriority)
+                    .Include(t => t.TicketStatus)
+                    .Include(t => t.TicketType)
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(t => t.Id == ticketId);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        #endregion
+
         #region Get Ticket Attachment By Id
 
         public async Task<TicketAttachment> GetTicketAttachmentByIdAsync(int ticketAttachmentId)
@@ -513,7 +536,6 @@ namespace TheBugTracker.Services
 
         #endregion
 
-
         #region Get Unassigned Tickets
         public async Task<List<Ticket>> GetUnassignedTicketsAsync(int companyId)
         {
@@ -533,8 +555,6 @@ namespace TheBugTracker.Services
         }
 
         #endregion
-
-
 
         #region Lookup Ticket Priority Id
         public async Task<int?> LookupTicketPriorityIdAsync(string priorityName)
