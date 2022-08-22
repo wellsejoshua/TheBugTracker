@@ -98,7 +98,7 @@ namespace TheBugTracker.Controllers
 
         #endregion
 
-        #region MyRegion
+        #region Unassigned Projects
         public async Task<IActionResult> UnassignedProjects()
         {
             int companyId = User.Identity.GetCompanyId().Value;
@@ -109,6 +109,94 @@ namespace TheBugTracker.Controllers
 
             return View(projects);
         }
+        #endregion
+
+        #region Assign Pm
+        [HttpGet]
+        public async Task<IActionResult> AssignPm(int projectId)
+        {
+            int companyId = User.Identity.GetCompanyId().Value;
+
+            AssignPMViewModel model = new();
+            model.Project = await _projectService.GetProjectByIdAsync(projectId, companyId);
+            model.PMList = new SelectList(await _rolesService.GetUsersInRoleAsync(nameof(Roles.ProjectManager), companyId), "Id", "FullName");
+
+            return View(model);
+        }
+        #endregion
+
+        #region Assign PM Post
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AssignPm(AssignPMViewModel model)
+        {
+            if (!string.IsNullOrEmpty(model.PMID))
+            {
+
+                await _projectService.AddProjectManagerAsync(model.PMID, model.Project.Id);
+
+                return RedirectToAction(nameof(Details), new { id = model.Project.Id });
+
+            }
+
+            return RedirectToAction(nameof(AssignPm), new { projectId = model.Project.Id });
+        }
+        #endregion
+
+        #region Assign Members Get
+        [HttpGet]
+        public async Task<IActionResult> AssignMembers(int id)
+        {
+            ProjectMembersViewModel model = new();
+            int companyId = User.Identity.GetCompanyId().Value;
+
+            model.Project = await _projectService.GetProjectByIdAsync(id, companyId);
+            List<BTUser> developers = await _rolesService.GetUsersInRoleAsync(nameof(Roles.Developer), companyId);
+            List<BTUser> submitters = await _rolesService.GetUsersInRoleAsync(nameof(Roles.Submitter), companyId);
+            //Concat has to be of same exact type. Concat converts to an I enumerable so has to be converted back to a list
+            List<BTUser> compamyMembers = developers.Concat(submitters).ToList();
+
+            List<string> projectMembers = model.Project.Members.Select(m => m.Id).ToList();
+            model.Users = new MultiSelectList(compamyMembers, "Id", "FullName", projectMembers);
+
+            return View(model);
+
+
+        }
+        #endregion
+
+
+        #region Assign Members Post
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AssignMembers(ProjectMembersViewModel model)
+        {
+            if (model.SelectedUsers != null)
+            {
+                //select allows you to look at one particular column
+                List<string> memberIds = (await _projectService.GetAllProjectMembersExceptPMAsync(model.Project.Id)).Select(m => m.Id).ToList();
+
+                //remove current members 
+                foreach (string member in memberIds)
+                {
+                    await _projectService.RemoveUserFromProjectAsync(member, model.Project.Id);
+                }
+
+                //add selected members
+                foreach (string member in model.SelectedUsers)
+                {
+                    await _projectService.AddUserToProjectAsync(member, model.Project.Id);
+                }
+
+                //got to project details
+                return RedirectToAction("Details", "Projects", new { id = model.Project.Id });
+
+            }
+
+            return RedirectToAction(nameof(AssignMembers), new { id = model.Project.Id });
+        }
+
         #endregion
 
 
