@@ -18,7 +18,6 @@ namespace TheBugTracker.Controllers
     public class ProjectsController : Controller
     {
         #region Properties
-        private readonly ApplicationDbContext _context;
         private readonly IBTRolesService _rolesService;
         private readonly IBTLookupService _lookupService;
         private readonly IBTFileService _fileService;
@@ -28,30 +27,19 @@ namespace TheBugTracker.Controllers
         #endregion
 
         #region Constructor
-        public ProjectsController(ApplicationDbContext context,
-                             IBTRolesService rolesService,
-                             IBTLookupService lookupService,
-                             IBTFileService fileService,
-                             IBTProjectService projectService,
-                             IBTCompanyInfoService companyInfoService,
-                             UserManager<BTUser> userManager)
+        public ProjectsController(IBTRolesService rolesService,
+                                  IBTLookupService lookupService,
+                                  IBTFileService fileService,
+                                  IBTProjectService projectService,
+                                  IBTCompanyInfoService companyInfoService,
+                                  UserManager<BTUser> userManager)
         {
-            _context = context;
             _rolesService = rolesService;
             _lookupService = lookupService;
             _fileService = fileService;
             _projectService = projectService;
             _companyInfoService = companyInfoService;
             _userManager = userManager;
-        } 
-        #endregion
-
-        // GET: Projects
-        #region Index
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.Projects.Include(p => p.Company).Include(p => p.ProjectPriority);
-            return View(await applicationDbContext.ToListAsync());
         }
         #endregion
 
@@ -236,7 +224,7 @@ namespace TheBugTracker.Controllers
             //Load Sectlist with data ie. PMList and PriorityList
             model.PMList = new SelectList(await _rolesService.GetUsersInRoleAsync(Roles.ProjectManager.ToString(), companyId), "Id", "FullName");
             model.PriorityList = new SelectList(await _lookupService.GetProjectPrioritiesAsync(), "Id", "Name");
-            
+
             return View(model);
         }
 
@@ -245,9 +233,9 @@ namespace TheBugTracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create( AddProjectWithPMViewModel model)
+        public async Task<IActionResult> Create(AddProjectWithPMViewModel model)
         {
-            if(model != null)
+            if (model != null)
             {
                 int companyId = User.Identity.GetCompanyId().Value;
                 try
@@ -277,7 +265,7 @@ namespace TheBugTracker.Controllers
                 return RedirectToAction("Index");
             }
 
-           
+
             return RedirectToAction("Create");
         }
 
@@ -325,10 +313,17 @@ namespace TheBugTracker.Controllers
                     //Might not need to be added
                     return RedirectToAction("Index");
                 }
-                catch (Exception)
+                catch (DbUpdateConcurrencyException)
                 {
 
-                    throw;
+                    if (!await ProjectExists(model.Project.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
             }
             return RedirectToAction("Edit");
@@ -342,7 +337,7 @@ namespace TheBugTracker.Controllers
                 return NotFound();
             }
             int companyId = User.Identity.GetCompanyId().Value;
-            var project = await _projectService.GetProjectByIdAsync(id.Value,companyId);
+            var project = await _projectService.GetProjectByIdAsync(id.Value, companyId);
             if (project == null)
             {
                 return NotFound();
@@ -395,9 +390,11 @@ namespace TheBugTracker.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProjectExists(int id)
+        private async Task<bool> ProjectExists(int id)
         {
-            return _context.Projects.Any(e => e.Id == id);
+            int companyId = User.Identity.GetCompanyId().Value;
+
+            return (await _projectService.GetAllProjectsByCompanyAsync(companyId)).Any(p => p.Id == id);
         }
     }
 }
