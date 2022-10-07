@@ -1,0 +1,127 @@
+﻿@model IEnumerable<TheBugTracker.Models.Project>
+@using TheBugTracker.Models.Enums
+@using Microsoft.AspNetCore.Identity
+@using TheBugTracker.Services.Interfaces
+
+@inject UserManager<BTUser> UserManager
+@inject IBTProjectService ProjectService
+
+@{
+  ViewData["Title"] = "Active Projects";
+  //gets all user information
+  BTUser btUser = await UserManager.GetUserAsync(User);
+}
+
+<h1>Active Projects</h1>
+
+@if (User.IsInRole(nameof(Roles.Admin)))
+{
+  <p>
+    <a asp-action="Create">Create New</a>
+  </p>
+}
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>
+        @Html.DisplayNameFor(model => model.Name)
+      </th>
+      <th>
+        @Html.DisplayNameFor(model => model.Description)
+      </th>
+      <th>
+        @Html.DisplayNameFor(model => model.StartDate)
+      </th>
+      <th>
+        @Html.DisplayNameFor(model => model.EndDate)
+      </th>
+      <th>
+        @Html.DisplayNameFor(model => model.ImageFileName)
+      </th>
+      <th>
+        @Html.DisplayNameFor(model => model.ImageFileData)
+      </th>
+      <th>
+        @Html.DisplayNameFor(model => model.ImageFileContentType)
+      </th>
+      <th>
+        @Html.DisplayNameFor(model => model.Archived)
+      </th>
+      <th>
+        @Html.DisplayNameFor(model => model.Company)
+      </th>
+      <th>
+        @Html.DisplayNameFor(model => model.ProjectPriority)
+      </th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var item in Model)
+    {
+      <tr>
+        <td>
+          @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.StartDate)
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.EndDate)
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.ImageFileName)
+        </td>
+        <td>
+          <!-- Html.DisplayFor(modelItem => item.ImageFileData)  -->
+          @if (item.ImageFileData != null)
+          {
+            <img style="width:60px;height:60px" src="data:image/*;base64,@(Convert.ToBase64String(item.ImageFileData))" alt="Missing Image" />
+          }
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.ImageFileContentType)
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.Archived)
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.Company.Id)
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.ProjectPriority.Name)
+        </td>
+        <td>
+
+          <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+
+          <!--inside of parenthesis because we have an awaited call that we need the result of in order to complete comparison
+              checks to see if the user is the project manager on this particular project-->
+          @{
+            bool isProjectPM = (await ProjectService.GetProjectManagerAsync(item.Id))?.Id == btUser.Id;
+
+          }
+
+          @if (User.IsInRole(nameof(Roles.Admin)) || isProjectPM)
+          {
+            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+            <!--razor syntax runs on server-->
+            @if (item.Archived)
+            {
+              <a asp-action="Restore" asp-route-id="@item.Id">Restore</a>
+
+            }
+            else
+            {
+              <a asp-action="Archive" asp-route-id="@item.Id">Archive</a>
+            }
+          }
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>

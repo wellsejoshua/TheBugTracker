@@ -1,41 +1,56 @@
-﻿@model IEnumerable<TheBugTracker.Models.Company>
+﻿@*model TheBugTracker.Models.Company*@
+
+@model TheBugTracker.Models.ViewModels.DashboardViewModel
+@using Microsoft.AspNetCore.Identity
+@using TheBugTracker.Services.Interfaces
+@using TheBugTracker.Models.Enums
+
+@inject UserManager<BTUser> UserManager
+@inject IBTRolesService RolesService
 
 @{
-    ViewData["Title"] = "Index";
+  ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+  <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+<p>@Model.Tickets.Count()</p>
+<p>@Model.Members.Count()</p>
+@foreach (var vwModel in Model.Tickets)
+{
+  <p>@Html.DisplayFor(vwModel => vwModel.Company.Members)</p>
 }
-    </tbody>
-</table>
+<p>@Html.DisplayFor(model => model.Tickets.Count)</p>
+<!--<table class="table">
+  <thead>
+    <tr>
+      <th>
+        @Html.DisplayNameFor(model => model.Tickets)
+      </th>
+      <th>
+        @Html.DisplayNameFor(model => model.Members)
+      </th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        @Html.DisplayFor(modelItem => Model.Tickets)
+      </td>
+      <td>
+        @Html.DisplayFor(modelItem => Model.Members)
+      </td>-->
+      @*<td>
+            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+        </td>*@
+    <!--</tr>
+
+  </tbody>
+</table>-->

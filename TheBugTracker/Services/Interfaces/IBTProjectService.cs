@@ -24,6 +24,8 @@ namespace TheBugTracker.Services.Interfaces
 
         public Task<List<Project>> GetArchivedProjectsByCompanyAsync(int companyId);
 
+        public Task<List<Project>> GetUnArchivedProjectsByCompanyAsync(int companyId);
+
         public Task<List<BTUser>> GetDevelopersOnProjectAsync(int projectId);
 
         public Task<BTUser> GetProjectManagerAsync(int projectId);
