@@ -48,9 +48,63 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\css\bootstrap.css" />
+    <Content Remove="wwwroot\css\bootstrap.css.map" />
+    <Content Remove="wwwroot\css\bootstrap.min.css" />
+    <Content Remove="wwwroot\css\bootstrap.min.css.map" />
+    <Content Remove="wwwroot\css\chartist.css" />
+    <Content Remove="wwwroot\css\chartist.css.map" />
+    <Content Remove="wwwroot\css\chartist.min.css" />
+    <Content Remove="wwwroot\css\morris.css" />
+    <Content Remove="wwwroot\css\weather-icons.css" />
+    <Content Remove="wwwroot\css\weather-icons.min.css" />
+    <Content Remove="wwwroot\js\bootstrap.bundle.js" />
+    <Content Remove="wwwroot\js\bootstrap.bundle.js.map" />
+    <Content Remove="wwwroot\js\bootstrap.bundle.min.js" />
+    <Content Remove="wwwroot\js\bootstrap.bundle.min.js.map" />
+    <Content Remove="wwwroot\js\bootstrap.js" />
+    <Content Remove="wwwroot\js\bootstrap.js.map" />
+    <Content Remove="wwwroot\js\bootstrap.min.js" />
+    <Content Remove="wwwroot\js\bootstrap.min.js.map" />
+    <Content Remove="wwwroot\js\Chart.min.js" />
+    <Content Remove="wwwroot\js\chartist.js" />
+    <Content Remove="wwwroot\js\chartist.min.js" />
+    <Content Remove="wwwroot\js\chartist.min.js.map" />
+    <Content Remove="wwwroot\js\fastclick.js" />
+    <Content Remove="wwwroot\js\jquery-ui.js" />
+    <Content Remove="wwwroot\js\jquery-ui.min.js" />
+    <Content Remove="wwwroot\js\jquery.js" />
+    <Content Remove="wwwroot\js\jquery.min.js" />
+    <Content Remove="wwwroot\js\jquery.slim.js" />
+    <Content Remove="wwwroot\js\jquery.slim.min.js" />
+    <Content Remove="wwwroot\js\jquery.slimscroll.js" />
+    <Content Remove="wwwroot\js\jquery.slimscroll.min.js" />
+    <Content Remove="wwwroot\js\morris.js" />
+    <Content Remove="wwwroot\js\morris.min.js" />
+    <Content Remove="wwwroot\js\popper.js" />
+    <Content Remove="wwwroot\js\popper.js.map" />
+    <Content Remove="wwwroot\js\popper.min.js" />
+    <Content Remove="wwwroot\js\popper.min.js.map" />
+    <Content Remove="wwwroot\js\raphael.js" />
+    <Content Remove="wwwroot\js\raphael.min.js" />
+    <Content Remove="wwwroot\js\raphael.no-deps.js" />
+    <Content Remove="wwwroot\js\raphael.no-deps.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\css\bootstrap-extend.css" />
+    <None Include="wwwroot\css\bootstrap.css" />
+    <None Include="wwwroot\css\bootstrap.css.map" />
+    <None Include="wwwroot\css\bootstrap.min.css" />
+    <None Include="wwwroot\css\bootstrap.min.css.map" />
+    <None Include="wwwroot\css\chartist.css" />
+    <None Include="wwwroot\css\chartist.css.map" />
+    <None Include="wwwroot\css\chartist.min.css" />
     <None Include="wwwroot\css\master_style.css" />
+    <None Include="wwwroot\css\morris.css" />
     <None Include="wwwroot\css\skins\_all-skins.css" />
+    <None Include="wwwroot\css\weather-icons.css" />
+    <None Include="wwwroot\css\weather-icons.min.css" />
     <None Include="wwwroot\files\bootstrap\dist\css\bootstrap-grid.css" />
     <None Include="wwwroot\files\bootstrap\dist\css\bootstrap-grid.css.map" />
     <None Include="wwwroot\files\bootstrap\dist\css\bootstrap-grid.min.css" />
@@ -3196,8 +3250,39 @@
     <None Include="wwwroot\img\user8-128x128.jpg" />
     <None Include="wwwroot\img\visa.png" />
     <None Include="wwwroot\img\weight.png" />
+    <None Include="wwwroot\js\bootstrap.bundle.js" />
+    <None Include="wwwroot\js\bootstrap.bundle.js.map" />
+    <None Include="wwwroot\js\bootstrap.bundle.min.js" />
+    <None Include="wwwroot\js\bootstrap.bundle.min.js.map" />
+    <None Include="wwwroot\js\bootstrap.js" />
+    <None Include="wwwroot\js\bootstrap.js.map" />
+    <None Include="wwwroot\js\bootstrap.min.js" />
+    <None Include="wwwroot\js\bootstrap.min.js.map" />
+    <None Include="wwwroot\js\Chart.min.js" />
+    <None Include="wwwroot\js\chartist.js" />
+    <None Include="wwwroot\js\chartist.min.js" />
+    <None Include="wwwroot\js\chartist.min.js.map" />
     <None Include="wwwroot\js\dashboard.js" />
     <None Include="wwwroot\js\demo.js" />
+    <None Include="wwwroot\js\fastclick.js" />
+    <None Include="wwwroot\js\jquery-ui.js" />
+    <None Include="wwwroot\js\jquery-ui.min.js" />
+    <None Include="wwwroot\js\jquery.js" />
+    <None Include="wwwroot\js\jquery.min.js" />
+    <None Include="wwwroot\js\jquery.slim.js" />
+    <None Include="wwwroot\js\jquery.slim.min.js" />
+    <None Include="wwwroot\js\jquery.slimscroll.js" />
+    <None Include="wwwroot\js\jquery.slimscroll.min.js" />
+    <None Include="wwwroot\js\morris.js" />
+    <None Include="wwwroot\js\morris.min.js" />
+    <None Include="wwwroot\js\popper.js" />
+    <None Include="wwwroot\js\popper.js.map" />
+    <None Include="wwwroot\js\popper.min.js" />
+    <None Include="wwwroot\js\popper.min.js.map" />
+    <None Include="wwwroot\js\raphael.js" />
+    <None Include="wwwroot\js\raphael.min.js" />
+    <None Include="wwwroot\js\raphael.no-deps.js" />
+    <None Include="wwwroot\js\raphael.no-deps.min.js" />
     <None Include="wwwroot\js\template.js" />
   </ItemGroup>
 
