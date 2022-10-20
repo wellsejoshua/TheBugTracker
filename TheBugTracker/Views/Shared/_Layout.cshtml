@@ -23,19 +23,19 @@
 
   <title>@ViewData["Title"] - TheBugTracker</title>
   @*Bootstrap 4.0*@
-  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="~/css/bootstrap.css">
   @*Bootstrap extend*@
-  <link rel="stylesheet" href="css/bootstrap-extend.css">
+  <link rel="stylesheet" href="~/css/bootstrap-extend.css">
   @*Morris charts*@
-  <link rel="stylesheet" href="/css/morris.css">
+  <link rel="stylesheet" href="~/css/morris.css">
   @*Chartist*@
-  <link rel="stylesheet" href="/css/chartist.css">
+  <link rel="stylesheet" href="~/css/chartist.css">
   @*weather weather*@
-  <link rel="stylesheet" href="/css/weather-icons.css">
+  <link rel="stylesheet" href="~/css/weather-icons.css">
   @*theme style*@
-  <link rel="stylesheet" href="css/master_style.css">
+  <link rel="stylesheet" href="~/css/master_style.css">
   @*skins*@
-  <link rel="stylesheet" href="css/skins/_all-skins.css">
+  <link rel="stylesheet" href="~/css/skins/_all-skins.css">
 
   <style>
     .fa.fa-user {
@@ -450,7 +450,7 @@
           <li class="nav-devider"></li>
           <li class="header nav-small-cap">PERSONAL</li>
           <li class="active">
-            <a href="#">
+            <a asp-area="" asp-controller="Home" asp-action="Dashboard">
               <i class="fa fa-dashboard"></i> <span>Dashboard</span>
               <span class="pull-right-container">
                 <i class="fa fa-angle-right pull-right"></i>
@@ -467,11 +467,11 @@
             </a>
             <ul class="treeview-menu">
               <li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="Create">Add Project</a></li>
-              <li><a href="#">Active Projects</a></li>
-              <li><a href="#">My Projects</a></li>
-              <li><a href="#">All Projects</a></li>
-              <li><a href="#">Manage Projects</a></li>
-              <li><a href="#">Project Archive</a></li>
+              <li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="ActiveProjects"> Active Projects</a></li>
+              <li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="MyProjects">My Projects</a></li>
+              <li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="AllProjects">All Projects</a></li>
+              <li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="UnassignedProjects">Manage Projects</a></li>
+              <li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="ArchivedProjects">Project Archive</a></li>
             </ul>
           </li>
           <li class="treeview">
@@ -483,17 +483,14 @@
               </span>
             </a>
             <ul class="treeview-menu">
-
-              <li><a href="#">All Tickets</a></li>
-              <li><a href="#">My Tickets</a></li>
-              <li><a href="#">Assign Tickets</a></li>
-              <li><a href="#">Add Ticket</a></li>
-              <li><a href="#">Ticket Archive</a></li>
-
-
+              <li><a class="dropdown-item" asp-area="" asp-controller="Tickets" asp-action="AllTickets">All Tickets</a></li>
+              <li><a class="dropdown-item" asp-area="" asp-controller="Tickets" asp-action="MyTickets">My Tickets</a></li>
+              <li><a class="dropdown-item" asp-area="" asp-controller="Tickets" asp-action="UnassignedTickets">Assign Tickets</a></li>
+              <li><a class="dropdown-item" asp-area="" asp-controller="Tickets" asp-action="Create">Add Ticket</a></li>
+              <li><a class="dropdown-item" asp-area="" asp-controller="Tickets" asp-action="ArchivedTickets">Ticket Archive</a></li>
             </ul>
           </li>
-          <li class="treeview">
+          @*<li class="treeview">
             <a href="#">
               <i class="fa fa-envelope"></i> <span>Notification Inbox</span>
               <span class="pull-right-container">
@@ -505,7 +502,7 @@
               <li><a href="#">Compose</a></li>
               <li><a href="#">Read</a></li>
             </ul>
-          </li>
+          </li>*@
           <li class="treeview">
             <a href="#">
               <i class="fa fa-gavel"></i> <span>Admin</span>
@@ -514,12 +511,12 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href="#">Manage Roles</a></li>
-              <li><a href="#">Assign Project Manager</a></li>
-              <li><a href="#">Manage Projects</a></li>
-              <li><a href="#">Assign Tickets</a></li>
-              <li><a href="#">Member Profiles</a></li>
-              <li><a href="#">Company Invite</a></li>
+              <li><a class="dropdown-item" asp-area="" asp-controller="UserRoles" asp-action="ManageUserRoles">Manage Roles</a></li>
+              <li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="AssignPm">Assign Project Manager</a></li>
+              <li><a class="dropdown-item" asp-area="" asp-controller="Tickets" asp-action="UnassignedTickets"> Assign Tickets</a></li>
+              <li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="AssignMembers">Assign Members To Project</a></li>
+              <li><a class="dropdown-item" asp-area="" asp-controller="Tickets" asp-action="AssignDeveloper">Assign Developer To Ticket</a></li>
+              <li><a class="dropdown-item" asp-area="" asp-controller="Invites" asp-action="Create"></a></li>
             </ul>
           </li>
 
@@ -556,11 +553,11 @@
 
   <!-- jQuery 3 -->
   @*<script src="/files/jquery/dist/jquery.js"></script>*@
-  <script src="/js/jquery.js"></script>
+  <script src="~/js/jquery.js"></script>
 
   <!-- jQuery UI 1.11.4 -->
   @*<script src="/files/jquery-ui/jquery-ui.js"></script>*@
-  <script src="/js/jquery-ui.js"></script>
+  <script src="~/js/jquery-ui.js"></script>
 
   <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
   <script>
@@ -573,35 +570,35 @@
 
   <!-- Bootstrap 4.0-->
   @*<script src="/files/bootstrap/dist/js/bootstrap.js"></script>*@
-  <script src="/js/bootstrap.js"></script>
+  <script src="~/js/bootstrap.js"></script>
 
   <!-- Morris.js charts -->
   <script src="/js/raphael.min.js""></script>
   @*<script src="/files/raphael/raphael.min.js"></script>*@
-  <script src="/js/morris.min.js"></script>
+  <script src="~/js/morris.min.js"></script>
   @*<script src="/files/morris.js/morris.min.js"></script>*@
 
   <!-- ChartJS -->
-  <script src="/js/Chart.min.js"></script>
+  <script src="~/js/Chart.min.js"></script>
   @*<script src="/files/chart.js-master/Chart.min.js"></script>*@
 
   <!-- Chartist  -->
-  <script src="/js/chartist.min.js"></script>
+  <script src="~/js/chartist.min.js"></script>
   @*<script src="/files/chartist-js-develop/chartist.min.js"></script>*@
 
   <!-- Slimscroll -->
   @*<script src="/files/jquery-slimscroll/jquery.slimscroll.js"></script>*@
-  <script src="/js/jquery.slimscroll.js"></script>
+  <script src="~/js/jquery.slimscroll.js"></script>
 
   <!-- FastClick -->
   @*<script src="/files/fastclick/lib/fastclick.js"></script>*@
-  <script src="/js/fastclick.js"></script>
+  <script src="~/js/fastclick.js"></script>
 
   <!-- Lion_admin App -->
-  <script src="js/template.js"></script>
+  <script src="~/js/template.js"></script>
 
   <!-- Lion_admin dashboard demo (This is only for demo purposes) -->
-  <script src="js/dashboard.js"></script>
+  <script src="~/js/dashboard.js"></script>
 
   @await RenderSectionAsync("Scripts", required: false)
 </body>
