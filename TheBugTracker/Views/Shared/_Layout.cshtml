@@ -21,6 +21,13 @@
   <meta name="author" content="">
   <link rel="icon" href="/img/favgicon.ico">
 
+
+  @*Original Stylesheets*@
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+  @*End Original Stylesheets*@
+
+
   <title>@ViewData["Title"] - TheBugTracker</title>
   @*Bootstrap 4.0*@
   <link rel="stylesheet" href="~/css/bootstrap.css">
@@ -388,7 +395,7 @@
                 <li class="user-body">
                   <div class="row no-gutters">
                     <div class="col-12 text-left">
-                      <a href="#"><i class="ion ion-person"></i> My Profile</a>
+                      <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="ion ion-person"></i> My Profile</a>
                     </div>
                     <div class="col-12 text-left">
                       <a href="#"><i class="ion ion-email-unread"></i> Inbox</a>
@@ -399,7 +406,7 @@
                     </div>
                     <div role="separator" class="divider col-12"></div>
                     <div class="col-12 text-left">
-                      <a href="#"><i class="fa fa-power-off"></i> Logout</a>
+                      <a href="javascript:document.getElementById('logoutForm').submit();"><i class="fa fa-power-off"></i> Logout</a>
                     </div>
                   </div>
                   <!-- /.row -->
@@ -407,6 +414,7 @@
               </ul>
             </li>
             <!-- Control Sidebar Toggle Button -->
+
             <li>
               <a href="#" data-toggle="control-sidebar">Activity <i class="fa fa-bolt"></i></a>
             </li>
@@ -440,7 +448,7 @@
             <a href="" class="link" data-toggle="tooltip" title="" data-original-title="Email">
               <i class="ion ion-android-mail"></i>
             </a>
-            <a href="" class="link" data-toggle="tooltip" title="" data-original-title="Logout">
+            <a href="javascript:document.getElementById('logoutForm').submit();" class="link" data-toggle="tooltip" title="" data-original-title="Logout">
               <i class="ion ion-power"></i>
             </a>
           </div>
@@ -470,7 +478,7 @@
               <li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="ActiveProjects"> Active Projects</a></li>
               <li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="MyProjects">My Projects</a></li>
               <li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="AllProjects">All Projects</a></li>
-              <li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="UnassignedProjects">Manage Projects</a></li>
+              <li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="UnassignedProjects">Unassigned Projects</a></li>
               <li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="ArchivedProjects">Project Archive</a></li>
             </ul>
           </li>
@@ -512,7 +520,7 @@
             </a>
             <ul class="treeview-menu">
               <li><a class="dropdown-item" asp-area="" asp-controller="UserRoles" asp-action="ManageUserRoles">Manage Roles</a></li>
-              <li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="AssignPm">Assign Project Manager</a></li>
+              <li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="AssignPM">Assign Project Manager</a></li>
               <li><a class="dropdown-item" asp-area="" asp-controller="Tickets" asp-action="UnassignedTickets"> Assign Tickets</a></li>
               <li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="AssignMembers">Assign Members To Project</a></li>
               <li><a class="dropdown-item" asp-area="" asp-controller="Tickets" asp-action="AssignDeveloper">Assign Developer To Ticket</a></li>
@@ -533,7 +541,7 @@
           <small>Control panel</small>
         </h1>
         <partial name="_LoginPartial" />
-        <a href="#" class="btn btn-block btn-warning btn-round btn-outline border text-center mt-15">New ticket</a>
+        <a asp-area="" asp-controller="Tickets" asp-action="Create" class="btn btn-block btn-warning btn-round btn-outline border text-center mt-15">New ticket</a>
 
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>

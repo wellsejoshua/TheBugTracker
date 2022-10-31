@@ -42,6 +42,7 @@ namespace TheBugTracker.Models
         [DisplayName("File Name")]
         public string ImageFileName { get; set; }
 
+        [DisplayName("Image")]
         public byte[] ImageFileData { get; set; }
 
         [DisplayName("File Extension")]

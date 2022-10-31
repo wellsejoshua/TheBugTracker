@@ -127,7 +127,7 @@ namespace TheBugTracker.Controllers
     #region Assign Pm
     [Authorize(Roles = "Admin")]
     [HttpGet]
-    public async Task<IActionResult> AssignPm(int projectId)
+    public async Task<IActionResult> AssignPM(int projectId)
     {
       int companyId = User.Identity.GetCompanyId().Value;
 
@@ -143,7 +143,7 @@ namespace TheBugTracker.Controllers
     [Authorize(Roles = "Admin")]
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> AssignPm(AssignPMViewModel model)
+    public async Task<IActionResult> AssignPM(AssignPMViewModel model)
     {
       if (!string.IsNullOrEmpty(model.PMID))
       {
@@ -154,7 +154,7 @@ namespace TheBugTracker.Controllers
 
       }
 
-      return RedirectToAction(nameof(AssignPm), new { projectId = model.Project.Id });
+      return RedirectToAction(nameof(AssignPM), new { projectId = model.Project.Id });
     }
     #endregion
 
