@@ -93,7 +93,6 @@ namespace TheBugTracker.Controllers
 
     #endregion
 
-
     #region Current / UnArchived Projects
 
     public async Task<IActionResult> ActiveProjects()
@@ -106,8 +105,6 @@ namespace TheBugTracker.Controllers
     }
 
     #endregion
-
-
 
     #region Unassigned Projects
     [Authorize(Roles = "Admin")]
@@ -156,6 +153,27 @@ namespace TheBugTracker.Controllers
 
       return RedirectToAction(nameof(AssignPM), new { projectId = model.Project.Id });
     }
+    #endregion
+
+    #region All Projects
+    public async Task<IActionResult> ProjectSelect()
+    {
+
+      List<Project> projects = new();
+      int companyId = User.Identity.GetCompanyId().Value;
+
+      if (User.IsInRole(nameof(Roles.Admin)) || User.IsInRole(nameof(Roles.ProjectManager)))
+      {
+        projects = await _companyInfoService.GetAllProjectsAsync(companyId);
+      }
+      else
+      {
+        projects = await _projectService.GetAllProjectsByCompanyAsync(companyId);
+      }
+
+      return View(projects);
+    }
+
     #endregion
 
     #region Assign Members Get

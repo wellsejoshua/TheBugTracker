@@ -16,15 +16,21 @@
       <div asp-validation-summary="ModelOnly" class="text-danger"></div>
       <div class="form-group">
         <label asp-for="ProjectId" class="control-label"></label>
-        <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
+        <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId">
+          <option></option>
+        </select>
       </div>
       <div class="form-group">
         <label asp-for="TicketTypeId" class="control-label"></label>
-        <select asp-for="TicketTypeId" class="form-control" asp-items="ViewBag.TicketTypeId"></select>
+        <select asp-for="TicketTypeId" class="form-control" asp-items="ViewBag.TicketTypeId">
+          <option></option>
+        </select>
       </div>
       <div class="form-group">
         <label asp-for="TicketPriorityId" class="control-label"></label>
-        <select asp-for="TicketPriorityId" class="form-control" asp-items="ViewBag.TicketPriorityId"></select>
+        <select asp-for="TicketPriorityId" class="form-control" asp-items="ViewBag.TicketPriorityId">
+          <option></option>
+        </select>
       </div>
       <div class="form-group">
         <label asp-for="Title" class="control-label"></label>
@@ -41,12 +47,13 @@
         <input type="submit" value="Create" class="btn btn-primary" />
       </div>
     </form>
+    <div>
+      <a class="btn btn-sm btn-info mb-15" asp-action="AllTickets">Back to Tickets List</a>
+    </div>
   </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

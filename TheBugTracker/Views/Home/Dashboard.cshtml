@@ -11,9 +11,12 @@
   Layout = "_Layout";
   ViewData["Title"] = "Dashboard";
   @* Instantiate the btUser *@
-  BTUser btUser = await UserManager.GetUserAsync(User);
-  int companyId = Model.Company.Id;
-  List<BTUser> usersDev = await RolesService.GetUsersInRoleAsync("Developer", companyId);
+BTUser btUser = await UserManager.GetUserAsync(User);
+int companyId = Model.Company.Id;
+List<BTUser> usersDev = await RolesService.GetUsersInRoleAsync("Developer", companyId);
+List<BTUser> projectManagers = await RolesService.GetUsersInRoleAsync("ProjectManager", companyId);
+List<BTUser> admins = await RolesService.GetUsersInRoleAsync("Admin", companyId);
+@*Add Notification Functionality*@
 
 
 
@@ -114,7 +117,7 @@
                 <span class="text-center">
                   Project Managers
                   <br>
-                  <p class="font-weight-bolder">0</p>
+                  <p class="font-weight-bolder">@projectManagers.Count</p>
                 </span>
                 <hr class="bg-black">
                 <i class="fa fa-users pull-left"></i>
@@ -151,9 +154,9 @@
               <div class="p-15 text-dark font-weight-bold">
                 <i class="fa fa-vcard pull-left"></i>
                 <span class="text-center">
-                  Members
+                  Admins
                   <br>
-                  <p class="font-weight-bolder">@Model.Members.Count</p>
+                  <p class="font-weight-bolder">@admins.Count</p>
                 </span>
                 <hr class="bg-black">
                 <i class="fa fa-book pull-left"></i>

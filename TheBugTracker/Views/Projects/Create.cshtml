@@ -15,7 +15,9 @@
       <div asp-validation-summary="ModelOnly" class="text-danger"></div>
       <div class="form-group">
         <label class="control-label">Choose a priority</label>
-        <select asp-for="Project.ProjectPriorityId" class="form-control" asp-items="Model.PriorityList"></select>
+        <select asp-for="Project.ProjectPriorityId" class="form-control" asp-items="Model.PriorityList">
+          <option></option>
+        </select>
       </div>
       <div class="form-group">
         <label asp-for="Project.Name" class="control-label"></label>
@@ -69,12 +71,13 @@
         <input type="submit" value="Create" class="btn btn-primary" />
       </div>
     </form>
+    <div>
+      <a asp-action="AllProjects">Back to Projects List</a>
+    </div>
   </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

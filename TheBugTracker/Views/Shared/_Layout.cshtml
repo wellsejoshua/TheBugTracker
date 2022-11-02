@@ -109,7 +109,7 @@
           <img src="/img/cbwellls/DragonflyLogo300.png" alt="logo" class="dark-logo">
         </span>
       </a>
-      
+
       <!-- Header Navbar -->
       <nav class="navbar navbar-static-top">
         <!-- Sidebar toggle button-->
@@ -429,13 +429,13 @@
       <section class="sidebar">
         <!-- Sidebar user panel -->
         <div class="user-panel">
-          
+
           <div class="ulogo">
             <a href="index.html">
               <!-- logo for regular state and mobile devices -->
               <span><b>DragonFly </b>Bug Tracker</span>
             </a>
-       
+
           </div>
           <div class="image">
             <img src="/img/cbwellls/defaultUserImage160 (2).png" class="rounded-circle" alt="User Image">
@@ -499,18 +499,18 @@
             </ul>
           </li>
           @*<li class="treeview">
-            <a href="#">
-              <i class="fa fa-envelope"></i> <span>Notification Inbox</span>
-              <span class="pull-right-container">
-                <i class="fa fa-angle-right pull-right"></i>
-              </span>
-            </a>
-            <ul class="treeview-menu">
-              <li><a href="#">Inbox</a></li>
-              <li><a href="#">Compose</a></li>
-              <li><a href="#">Read</a></li>
-            </ul>
-          </li>*@
+              <a href="#">
+                <i class="fa fa-envelope"></i> <span>Notification Inbox</span>
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-right pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="#">Inbox</a></li>
+                <li><a href="#">Compose</a></li>
+                <li><a href="#">Read</a></li>
+              </ul>
+            </li>*@
           <li class="treeview">
             <a href="#">
               <i class="fa fa-gavel"></i> <span>Admin</span>
@@ -522,6 +522,7 @@
               <li><a class="dropdown-item" asp-area="" asp-controller="UserRoles" asp-action="ManageUserRoles">Manage Roles</a></li>
               <li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="AssignPM">Assign Project Manager</a></li>
               <li><a class="dropdown-item" asp-area="" asp-controller="Tickets" asp-action="UnassignedTickets"> Assign Tickets</a></li>
+              @*<li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="AssignMembers">Assign Members To Project</a></li>*@
               <li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="AssignMembers">Assign Members To Project</a></li>
               <li><a class="dropdown-item" asp-area="" asp-controller="Tickets" asp-action="AssignDeveloper">Assign Developer To Ticket</a></li>
               <li><a class="dropdown-item" asp-area="" asp-controller="Invites" asp-action="Create"></a></li>
@@ -581,7 +582,7 @@
   <script src="~/js/bootstrap.js"></script>
 
   <!-- Morris.js charts -->
-  <script src="/js/raphael.min.js""></script>
+  <script src="/js/raphael.min.js" "></script>
   @*<script src="/files/raphael/raphael.min.js"></script>*@
   <script src="~/js/morris.min.js"></script>
   @*<script src="/files/morris.js/morris.min.js"></script>*@
