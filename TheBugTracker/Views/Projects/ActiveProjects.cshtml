@@ -12,116 +12,142 @@
   BTUser btUser = await UserManager.GetUserAsync(User);
 }
 
-<h1>Active Projects</h1>
+<h1 class="text-center">Active Projects</h1>
 
-@if (User.IsInRole(nameof(Roles.Admin)))
+
+
+@if (User.IsInRole(nameof(Roles.Admin)) || User.IsInRole(nameof(Roles.Admin)))
 {
-  <p>
-    <a asp-action="Create">Create New</a>
-  </p>
+  <div class=" mt-15 text-center">
+    <p>
+      <a class="btn btn-warning btn-rounded" asp-action="Create">Create New Project</a>
+    </p>
+  </div>
+
 }
+<div class="row">
 
-<table class="table table-responsive">
-  <thead>
-    <tr>
-      <th>
-        @Html.DisplayNameFor(model => model.Name)
-      </th>
-      <th>
-        @Html.DisplayNameFor(model => model.Description)
-      </th>
-      <th>
-        @Html.DisplayNameFor(model => model.StartDate)
-      </th>
-      <th>
-        @Html.DisplayNameFor(model => model.EndDate)
-      </th>
-      <th>
-        @Html.DisplayNameFor(model => model.ImageFileName)
-      </th>
-      <th>
-        @Html.DisplayNameFor(model => model.ImageFileData)
-      </th>
-      <th>
-        @Html.DisplayNameFor(model => model.ImageFileContentType)
-      </th>
-      <th>
-        @Html.DisplayNameFor(model => model.Archived)
-      </th>
-      <th>
-        @Html.DisplayNameFor(model => model.Company)
-      </th>
-      <th>
-        @Html.DisplayNameFor(model => model.ProjectPriority)
-      </th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    @foreach (var item in Model)
-    {
-      <tr>
-        <td>
-          @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-          @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-          @Html.DisplayFor(modelItem => item.StartDate)
-        </td>
-        <td>
-          @Html.DisplayFor(modelItem => item.EndDate)
-        </td>
-        <td>
-          @Html.DisplayFor(modelItem => item.ImageFileName)
-        </td>
-        <td>
-          <!-- Html.DisplayFor(modelItem => item.ImageFileData)  -->
-          @if (item.ImageFileData != null)
-          {
-            <img style="width:60px;height:60px" src="data:image/*;base64,@(Convert.ToBase64String(item.ImageFileData))" alt="Missing Image" />
-          }
-        </td>
-        <td>
-          @Html.DisplayFor(modelItem => item.ImageFileContentType)
-        </td>
-        <td>
-          @Html.DisplayFor(modelItem => item.Archived)
-        </td>
-        <td>
-          @Html.DisplayFor(modelItem => item.Company.Id)
-        </td>
-        <td>
-          @Html.DisplayFor(modelItem => item.ProjectPriority.Name)
-        </td>
-        <td>
+  @* Projects Table *@
+  <div class="col">
+    <div class="bg-secondary">
+      <div class="card m-1 p-2">
+        <div class="card-header">
+          <h2 class="bg-info rounded text-center">Active Projects</h2>
+        </div>
+        <div class="card-body">
 
-          <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+          <div class="table-responsive" style="overflow-y:auto;height:600px;">
+            <table class="table table-hover">
+              <thead class="">
+                <tr>
+                  @* Table header *@
 
-          <!--inside of parenthesis because we have an awaited call that we need the result of in order to complete comparison
-              checks to see if the user is the project manager on this particular project-->
-          @{
-            bool isProjectPM = (await ProjectService.GetProjectManagerAsync(item.Id))?.Id == btUser.Id;
+                  <th>Name</th>
+                  <th>Image</th>
+                  <th>Project Manager</th>
+                  <th>StartDate</th>
+                  <th>EndDate</th>
+                  <th>Priority</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @* Table body *@
+                @foreach (var project in Model.OrderByDescending(d => d.EndDate))
+                {
+                  BTUser projectManager = await ProjectService.GetProjectManagerAsync(project.Id);
+                  <tr>
+                    <td><a asp-action="Details" asp-controller="Projects" asp-route-id="@project.Id" style="color:black"><strong>@project.Name</strong></a></td>
+                    <td>
+                      @if (project.ImageFileData != null)
+                      {
+                        <img style="width:45px;height:45px" src="data:image/*;base64,@(Convert.ToBase64String(project.ImageFileData))" alt="Missing Image" />
+                      }
+                      else
+                      {
+                        <img style="width:45px;height:45px" src="~/img/cbwellls/DragonflyLogo300.png" />
+                      }
+                    </td>
+                    @if (projectManager != null)
+                    {
+                      <td>
+                        @if (projectManager.AvatarFileData != null)
+                        {
+                          <img class="rounded-circle" style=" width:15px;height:15px;" src="data:image/*;base64,@(Convert.ToBase64String(projectManager.AvatarFileData))" alt="" />
+                        }
+                        else
+                        {
+                          <img class="rounded-circle" style=" width:30px;height:30px;" src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" alt="" />
+                        }
+                        @projectManager.FullName
 
-          }
 
-          @if (User.IsInRole(nameof(Roles.Admin)) || isProjectPM)
-          {
-            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-            <!--razor syntax runs on server-->
-            @if (item.Archived)
-            {
-              <a asp-action="Restore" asp-route-id="@item.Id">Restore</a>
+                      </td>
+                    }
+                    else
+                    {
+                      <td>
+                        <span><a asp-action="AssignPM" asp-route-projectId="@project.Id" class="btn btn-xs btn-outline-info">Assign PM</a></span>
+                      </td>
+                    }
 
-            }
-            else
-            {
-              <a asp-action="Archive" asp-route-id="@item.Id">Archive</a>
-            }
-          }
-        </td>
-      </tr>
-    }
-  </tbody>
-</table>
+
+                    <td> <span style="font-size:small">@project.StartDate.ToString("MM.dd.yyyy")</span> </td>
+                    <td> <span style="font-size:small">@project.EndDate.ToString("MM.dd.yyyy")</span> </td>
+                    <td> <span class="badge bg-dark">@project.ProjectPriority?.Name</span> </td>
+                    <td>
+                      <a class="btn btn-sm btn-outline-info" asp-action="Details" asp-controller="Projects" asp-route-id="@project.Id"><i class="fs-5 bi-justify" title="Details"></i></a>
+
+                      @{
+                        bool isProjectPM = (await ProjectService.GetProjectManagerAsync(project.Id))?.Id == btUser.Id;
+
+                      }
+
+                      @if (User.IsInRole(nameof(Roles.Admin)) || isProjectPM)
+                      {
+                        <a class="btn btn-sm btn-outline-warning" asp-action="Edit" asp-route-id="@project.Id"><i class="fs-5 bi-pencil" title="Edit"></i></a>
+                        <!--razor syntax runs on server-->
+                        @if (project.Archived)
+                        {
+                          <a class="btn btn-sm btn-outline-success" asp-action="Restore" asp-route-id="@project.Id"><i class="fs-5 bi-plug" title="Restore"></i></a>
+
+                        }
+                        else
+                        {
+                          <a class="btn btn-sm btn-outline-danger" asp-action="Archive" asp-route-id="@project.Id"><i class="fs-5 bi-archive" title="Archive"></i></a>
+                        }
+                      }
+
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

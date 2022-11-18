@@ -155,23 +155,41 @@ namespace TheBugTracker.Controllers
     }
     #endregion
 
-    #region All Projects
+    #region Project Select Get
+    [Authorize(Roles = "Admin,ProjectManager")]
+    [HttpGet]
     public async Task<IActionResult> ProjectSelect()
     {
 
-      List<Project> projects = new();
+      
       int companyId = User.Identity.GetCompanyId().Value;
 
       if (User.IsInRole(nameof(Roles.Admin)) || User.IsInRole(nameof(Roles.ProjectManager)))
       {
-        projects = await _companyInfoService.GetAllProjectsAsync(companyId);
+        ViewData["Id"] = new SelectList(await _projectService.GetAllProjectsByCompanyAsync(companyId), "Id", "Name");
       }
       else
       {
-        projects = await _projectService.GetAllProjectsByCompanyAsync(companyId);
+        List<Project> projects = new();
+        ViewData["Id"] = new SelectList(projects, "Id", "Name");
       }
 
-      return View(projects);
+      return View();
+    }
+
+    #endregion
+
+    #region Project Select Post
+    [Authorize(Roles = "Admin,ProjectManager")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ProjectSelect(int id)
+    {
+      int companyId = User.Identity.GetCompanyId().Value;
+      Project project = await _projectService.GetProjectByIdAsync(id, companyId);
+
+      return RedirectToAction("AssignMembers", "Projects", new { id = id });
+
     }
 
     #endregion
@@ -201,7 +219,6 @@ namespace TheBugTracker.Controllers
 
     #region Assign Members Post
     [Authorize(Roles = "Admin,ProjectManager")]
-
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> AssignMembers(ProjectMembersViewModel model)
@@ -342,6 +359,8 @@ namespace TheBugTracker.Controllers
 
     #endregion
 
+    #region Edit Post
+
     // POST: Projects/Edit/5
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -387,6 +406,9 @@ namespace TheBugTracker.Controllers
       return RedirectToAction("Edit");
     }
 
+    #endregion
+
+    #region Archive
     // GET: Projects/Archive/5
     [Authorize(Roles = "Admin,ProjectManager")]
     public async Task<IActionResult> Archive(int? id)
@@ -405,6 +427,9 @@ namespace TheBugTracker.Controllers
       return View(project);
     }
 
+    #endregion
+
+    #region Archive Post
     // POST: Projects/Archive/5
     [Authorize(Roles = "Admin,ProjectManager")]
     [HttpPost, ActionName("Archive")]
@@ -416,10 +441,12 @@ namespace TheBugTracker.Controllers
 
       await _projectService.ArchiveProjectAsync(project);
 
-      return RedirectToAction(nameof(Index));
+      return RedirectToAction("ArchivedProjects");
     }
 
+    #endregion
 
+    #region Restore
     // GET: Projects/Restore/5
     [Authorize(Roles = "Admin,ProjectManager")]
     public async Task<IActionResult> Restore(int? id)
@@ -438,6 +465,9 @@ namespace TheBugTracker.Controllers
       return View(project);
     }
 
+    #endregion
+
+    #region Restore Post
     // POST: Projects/Restore/5
     [Authorize(Roles = "Admin,ProjectManager")]
     [HttpPost, ActionName("Restore")]
@@ -449,14 +479,19 @@ namespace TheBugTracker.Controllers
 
       await _projectService.RestoreProjectAsync(project);
 
-      return RedirectToAction(nameof(Index));
+      return RedirectToAction("AllProjects");
     }
 
+    #endregion
+
+    #region Project Exists Private
     private async Task<bool> ProjectExists(int id)
     {
       int companyId = User.Identity.GetCompanyId().Value;
 
       return (await _projectService.GetAllProjectsByCompanyAsync(companyId)).Any(p => p.Id == id);
     }
+
+    #endregion
   }
 }

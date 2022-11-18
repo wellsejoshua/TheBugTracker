@@ -12,13 +12,15 @@
   BTUser btUser = await UserManager.GetUserAsync(User);
 }
 
-<h1>All Projects</h1>
 
 @if (User.IsInRole(nameof(Roles.Admin)) || User.IsInRole(nameof(Roles.Admin)))
 {
+<div class=" mt-15 text-center">
   <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-warning btn-rounded" asp-action="Create">Create New Project</a>
   </p>
+</div>
+
 }
 <div class="row">
 
@@ -27,7 +29,7 @@
     <div class="bg-secondary">
       <div class="card m-1 p-2">
         <div class="card-header">
-          <h2 class="bg-info rounded">Projects</h2>
+          <h2 class="bg-info rounded text-center">All Projects</h2>
         </div>
         <div class="card-body">
 
@@ -91,7 +93,7 @@
                     <td> <span style="font-size:small">@project.EndDate.ToString("MM.dd.yyyy")</span> </td>
                     <td> <span class="badge bg-dark">@project.ProjectPriority?.Name</span> </td>
                     <td>
-                      <a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-controller="Projects" asp-route-id="@project.Id"><i class="fs-5 bi-justify" title="Details"></i></a>
+                      <a class="btn btn-sm btn-outline-info" asp-action="Details" asp-controller="Projects" asp-route-id="@project.Id"><i class="fs-5 bi-justify" title="Details"></i></a>
 
                       @{
                         bool isProjectPM = (await ProjectService.GetProjectManagerAsync(project.Id))?.Id == btUser.Id;
@@ -100,16 +102,16 @@
 
                       @if (User.IsInRole(nameof(Roles.Admin)) || isProjectPM)
                       {
-                        <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@project.Id"><i class="fs-5 bi-pencil" title="Edit"></i></a>
+                        <a class="btn btn-sm btn-outline-warning" asp-action="Edit" asp-route-id="@project.Id"><i class="fs-5 bi-pencil" title="Edit"></i></a>
                         <!--razor syntax runs on server-->
                         @if (project.Archived)
                         {
-                          <a class="btn btn-sm btn-outline-secondary" asp-action="Restore" asp-route-id="@project.Id"><i class="fs-5 bi-plug" title="Restore"></i></a>
+                          <a class="btn btn-sm btn-outline-success" asp-action="Restore" asp-route-id="@project.Id"><i class="fs-5 bi-plug" title="Restore"></i></a>
 
                         }
                         else
                         {
-                          <a class="btn btn-sm btn-outline-secondary" asp-action="Archive" asp-route-id="@project.Id"><i class="fs-5 bi-archive" title="Archive"></i></a>
+                          <a class="btn btn-sm btn-outline-danger" asp-action="Archive" asp-route-id="@project.Id"><i class="fs-5 bi-archive" title="Archive"></i></a>
                         }
                       }
 

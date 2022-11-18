@@ -455,7 +455,7 @@ namespace TheBugTracker.Controllers
       Ticket ticket = await _ticketService.GetTicketByIdAsync(id);
       ticket.Archived = true;
       await _ticketService.UpdateTicketAsync(ticket);
-      return RedirectToAction(nameof(Index));
+      return RedirectToAction("ArchivedTickets");
     }
     #endregion
 
@@ -497,7 +497,7 @@ namespace TheBugTracker.Controllers
       Ticket ticket = await _ticketService.GetTicketByIdAsync(id);
       ticket.Archived = false;
       await _ticketService.UpdateTicketAsync(ticket);
-      return RedirectToAction(nameof(Index));
+      return RedirectToAction("AllTickets");
     }
     #endregion
 
@@ -516,7 +516,7 @@ namespace TheBugTracker.Controllers
 
     #endregion
 
-    #region Ticket Exists
+    #region Ticket Exists Private
     private async Task<bool> TicketExists(int id)
     {
       int companyId = User.Identity.GetCompanyId().Value;
