@@ -123,7 +123,7 @@ namespace TheBugTracker.Services
                 DateTime inviteDate = invite.InviteDate.DateTime;
 
                 //custom validation of invite based on the date it was issued
-                //In this case we are allowing an invite to be valid for 7 days
+                //In this case I'm allowing an invite to be valid for 7 days
                 bool validDate = (DateTime.Now - inviteDate).TotalDays <= 7;
 
                 if (validDate)

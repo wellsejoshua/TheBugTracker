@@ -194,6 +194,46 @@ namespace TheBugTracker.Controllers
 
     #endregion
 
+    [Authorize(Roles = "Admin")]
+    [HttpGet]
+    public async Task<IActionResult> AssignPmProjectSelect()
+    {
+
+
+      int companyId = User.Identity.GetCompanyId().Value;
+
+
+      if (User.IsInRole(nameof(Roles.Admin)) || User.IsInRole(nameof(Roles.ProjectManager)))
+      {
+        ViewData["Id"] = new SelectList(await _projectService.GetAllProjectsByCompanyAsync(companyId), "Id", "Name");
+      }
+      else
+      {
+        List<Project> projects = new();
+        ViewData["Id"] = new SelectList(projects, "Id", "Name");
+      }
+
+      return View();
+    }
+
+
+    [Authorize(Roles = "Admin")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AssignPmProjectSelect(int id)
+    {
+      int companyId = User.Identity.GetCompanyId().Value;
+
+      AssignPMViewModel model = new();
+      model.Project = await _projectService.GetProjectByIdAsync(id, companyId);
+      model.PMList = new SelectList(await _rolesService.GetUsersInRoleAsync(nameof(Roles.ProjectManager), companyId), "Id", "FullName");
+
+
+
+      return RedirectToAction("AssignPM", "Projects", new { id = id });
+
+    }
+
     #region Assign Members Get
     [Authorize(Roles = "Admin,ProjectManager")]
     [HttpGet]
