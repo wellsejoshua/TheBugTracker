@@ -131,7 +131,11 @@ namespace TheBugTracker.Controllers
       AssignPMViewModel model = new();
       model.Project = await _projectService.GetProjectByIdAsync(projectId, companyId);
       model.PMList = new SelectList(await _rolesService.GetUsersInRoleAsync(nameof(Roles.ProjectManager), companyId), "Id", "FullName");
-
+      BTUser manager = await _projectService.GetProjectManagerAsync(projectId);
+      if(manager != null)
+      {
+        model.PMID = manager.Id;
+      }
       return View(model);
     }
     #endregion
@@ -230,7 +234,7 @@ namespace TheBugTracker.Controllers
 
 
 
-      return RedirectToAction("AssignPM", "Projects", new { id = id });
+      return RedirectToAction("AssignPM", "Projects", new { projectId = id });
 
     }
 

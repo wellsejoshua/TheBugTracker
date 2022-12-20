@@ -5,8 +5,33 @@
 @inject SignInManager<BTUser> SignInManager
 @inject UserManager<BTUser> UserManager
 @inject IBTRolesService RolesService
+@inject IBTNotificationService NotificationService
 
 @{
+  BTUser thisbtUser = new();
+  List<Notification> notifications = new();
+}
+@if (User.Identity.IsAuthenticated)
+{
+
+  thisbtUser = await UserManager.GetUserAsync(User);
+  notifications = await NotificationService.GetReceivedNotificationsAsync(thisbtUser.Id);
+  int count = notifications.Count;
+
+  if (notifications.Count > 7)
+  {
+    if (notifications.Count == 8)
+    {
+      notifications.RemoveAt(7);
+    }
+    else
+    {
+      int numItemsRemove = count - 7;
+      notifications.RemoveRange(7, numItemsRemove);
+    }
+  }
+
+
 
 
 }
@@ -133,18 +158,18 @@
             @if (User.Identity.IsAuthenticated)
             {
               <!-- Messages -->
-              <li class="dropdown messages-menu">
+              <!--<li class="dropdown messages-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <i class="mdi mdi-email"></i>
                 </a>
                 <ul class="dropdown-menu scale-up">
                   <li class="header">You have 5 messages</li>
-                  <li>
+                  <li>-->
                     <!-- inner menu: contains the actual data -->
-                    <ul class="menu inner-content-div">
-                      <li>
+                    <!--<ul class="menu inner-content-div">
+                      <li>-->
                         <!-- start message -->
-                        <a href="#">
+                        <!--<a href="#">
                           <div class="pull-left">
                             <img src="img/cbwellls/DragonflyLogo160.png" class="rounded-circle" alt="User Image">
                           </div>
@@ -156,9 +181,9 @@
                             <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
                           </div>
                         </a>
-                      </li>
+                      </li>-->
                       <!-- end message -->
-                      <li>
+                      <!--<li>
                         <a href="#">
                           <div class="pull-left">
                             <img src="/img/user3-128x128.jpg" class="rounded-circle" alt="User Image">
@@ -218,73 +243,45 @@
                   </li>
                   <li class="footer"><a href="#">See all e-Mails</a></li>
                 </ul>
-              </li>
+              </li>-->
               <!-- Notifications -->
               <li class="dropdown notifications-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <i class="mdi mdi-bell"></i>
                 </a>
                 <ul class="dropdown-menu scale-up">
-                  <li class="header">You have 7 notifications</li>
+                  <li class="header">You have @notifications.Count notifications</li>
                   <li>
                     <!-- inner menu: contains the actual data -->
                     <ul class="menu inner-content-div">
-                      <li>
-                        <a href="#">
-                          <i class="fa fa-circle-o text-aqua"></i> Curabitur id eros quis nunc suscipit blandit.
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <i class="fa fa-circle-o text-yellow"></i> Duis malesuada justo eu sapien elementum, in semper
-                          diam posuere.
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <i class="fa fa-circle-o text-red"></i> Donec at nisi sit amet tortor commodo porttitor pretium a
-                          erat.
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <i class="fa fa-circle-o text-green"></i> In gravida mauris et nisi
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <i class="fa fa-circle-o text-red"></i> Praesent eu lacus in libero dictum fermentum.
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <i class="fa fa-circle-o text-red"></i> Nunc fringilla lorem
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <i class="fa fa-circle-o text-red"></i> Nullam euismod dolor ut quam interdum, at scelerisque ipsum
-                          imperdiet.
-                        </a>
-                      </li>
+                      @foreach (Notification notification in notifications)
+                      {
+                        string message = notification.Message;
+                        <li>
+                          <a href="#">
+                            <i class="fa fa-circle-o text-aqua"></i> @message
+                          </a>
+                        </li>
+                      }
+
                     </ul>
                   </li>
-                  <li class="footer"><a href="#">View all</a></li>
+                  <li class="footer"><a asp-controller="Notifications" asp-action="Index">View all</a></li>
                 </ul>
               </li>
               <!-- Tasks -->
-              <li class="dropdown tasks-menu">
+              <!--<li class="dropdown tasks-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <i class="mdi mdi-message"></i>
                 </a>
                 <ul class="dropdown-menu scale-up">
                   <li class="header">You have 6 tasks</li>
-                  <li>
+                  <li>-->
                     <!-- inner menu: contains the actual data -->
-                    <ul class="menu inner-content-div">
-                      <li>
+                    <!--<ul class="menu inner-content-div">
+                      <li>-->
                         <!-- Task item -->
-                        <a href="#">
+                        <!--<a href="#">
                           <h3>
                             Lorem ipsum dolor sit amet
                             <small class="pull-right">30%</small>
@@ -296,11 +293,11 @@
                             </div>
                           </div>
                         </a>
-                      </li>
+                      </li>-->
                       <!-- end task item -->
-                      <li>
+                      <!--<li>-->
                         <!-- Task item -->
-                        <a href="#">
+                        <!--<a href="#">
                           <h3>
                             Vestibulum nec ligula
                             <small class="pull-right">20%</small>
@@ -312,11 +309,11 @@
                             </div>
                           </div>
                         </a>
-                      </li>
+                      </li>-->
                       <!-- end task item -->
-                      <li>
+                      <!--<li>-->
                         <!-- Task item -->
-                        <a href="#">
+                        <!--<a href="#">
                           <h3>
                             Donec id leo ut ipsum
                             <small class="pull-right">70%</small>
@@ -328,11 +325,11 @@
                             </div>
                           </div>
                         </a>
-                      </li>
+                      </li>-->
                       <!-- end task item -->
-                      <li>
+                      <!--<li>-->
                         <!-- Task item -->
-                        <a href="#">
+                        <!--<a href="#">
                           <h3>
                             Praesent vitae tellus
                             <small class="pull-right">40%</small>
@@ -344,11 +341,11 @@
                             </div>
                           </div>
                         </a>
-                      </li>
+                      </li>-->
                       <!-- end task item -->
-                      <li>
+                      <!--<li>-->
                         <!-- Task item -->
-                        <a href="#">
+                        <!--<a href="#">
                           <h3>
                             Nam varius sapien
                             <small class="pull-right">80%</small>
@@ -360,11 +357,11 @@
                             </div>
                           </div>
                         </a>
-                      </li>
+                      </li>-->
                       <!-- end task item -->
-                      <li>
+                      <!--<li>-->
                         <!-- Task item -->
-                        <a href="#">
+                        <!--<a href="#">
                           <h3>
                             Nunc fringilla
                             <small class="pull-right">90%</small>
@@ -376,16 +373,16 @@
                             </div>
                           </div>
                         </a>
-                      </li>
+                      </li>-->
                       <!-- end task item -->
-                    </ul>
+                    <!--</ul>
                   </li>
                   <li class="footer">
                     <a href="#">View all tasks</a>
                   </li>
                 </ul>
-              </li>
-              <!-- User Account -->
+              </li>-->
+              <!-- User Account image size 128x128-->
               <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <img src="/img/user5-128x128.jpg" class="user-image rounded-circle" alt="User Image">
@@ -400,8 +397,8 @@
                       {
                       }
 
-                      Romi Roy
-                      <small class="mb-5">jb@gmail.com</small>
+                      @thisbtUser.FullName;
+                      <small class="mb-5">@thisbtUser.Email</small>
                       <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Profile" class="btn btn-danger btn-sm btn-rounded">View Profile</a>
                     </p>
                   </li>
@@ -427,16 +424,7 @@
                   </li>
                 </ul>
               </li>
-
-              <!-- Control Sidebar Toggle Button -->
-
-              <li>
-                <a href="#" data-toggle="control-sidebar">Activity <i class="fa fa-bolt"></i></a>
-              </li>
             }
-
-
-
           </ul>
         </div>
       </nav>
@@ -491,9 +479,17 @@
           <ul class="sidebar-menu" data-widget="tree">
             <li class="nav-devider"></li>
             <li class="header nav-small-cap">PERSONAL</li>
-            <li class="active">
+            <li>
               <a asp-area="" asp-controller="Home" asp-action="Dashboard">
                 <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-right pull-right"></i>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a asp-controller="Notifications" asp-action="Index">
+                <i class="fa fa-bell"></i> <span>Notification Inbox</span>
                 <span class="pull-right-container">
                   <i class="fa fa-angle-right pull-right"></i>
                 </span>
@@ -514,10 +510,9 @@
                 }
 
                 <li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="ActiveProjects"> Active Projects</a></li>
-                @if (User.IsInRole(nameof(Roles.Admin)))
-                {
-                  <li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="MyProjects">My Projects</a></li>
-                }
+
+                <li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="MyProjects">My Projects</a></li>
+
 
                 <li><a class="dropdown-item" asp-area="" asp-controller="Projects" asp-action="AllProjects">All Projects</a></li>
                 @if (User.IsInRole(nameof(Roles.Admin)))
@@ -705,7 +700,7 @@
   <script src="~/js/bootstrap.js"></script>
 
   <!-- Morris.js charts -->
-  <script src="/js/raphael.min.js" "></script>
+  <script src="~/js/raphael.min.js"></script>
   @*<script src="/files/raphael/raphael.min.js"></script>*@
   <script src="~/js/morris.min.js"></script>
   @*<script src="/files/morris.js/morris.min.js"></script>*@

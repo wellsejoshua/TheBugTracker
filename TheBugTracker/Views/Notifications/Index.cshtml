@@ -1,71 +1,134 @@
 ﻿@model IEnumerable<TheBugTracker.Models.Notification>
 
 @{
-    ViewData["Title"] = "Index";
+  ViewData["Title"] = "Index";
+
 }
 
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+  <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Message)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Created)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Viewed)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ticket)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Recipient)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sender)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Message)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Created)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Viewed)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ticket.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Recipient.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sender.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+
+<div class="row">
+
+  @* Projects Table *@
+  <div class="col">
+    <div class="bg-secondary">
+      <div class="card m-1 p-2">
+        <div class="card-header">
+          <h2 class="bg-info rounded text-center">Notifications</h2>
+        </div>
+        <div class="card-body">
+
+          <div class="table-responsive" style="overflow-y:auto;height:600px;">
+            <table class="table table-hover">
+              <thead class="">
+                <tr>
+                  @* Table header *@
+
+                  <th>Title</th>
+                  <th>Message</th>
+                  <th>Date Created</th>
+                  <th>Viewed</th>
+                  <th>Ticket</th>
+                  <th>Recipient</th>
+                  <th>Sender</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @* Table body *@
+                @foreach (var notification in Model.OrderByDescending(d => d.Created))
+                {
+                  BTUser sender = notification.Sender;
+                  BTUser recipient = notification.Recipient;
+                  <tr>
+                    <td><strong>@notification.Title</strong></td>
+                    <td>@notification.Message</td>
+                    <td> <span style="font-size:small">@notification.Created.ToString("MM.dd.yyyy")</span> </td>
+                    <td>@notification.Viewed</td>
+                    <td>@notification.Ticket.Title</td>
+
+
+                    @if (recipient != null)
+                    {
+                      <td>
+                        @if (recipient.AvatarFileData != null)
+                        {
+                          <img class="rounded-circle" style=" width:15px;height:15px;" src="data:image/*;base64,@(Convert.ToBase64String(recipient.AvatarFileData))" alt="" />
+                        }
+                        else
+                        {
+                          <img class="rounded-circle" style=" width:30px;height:30px;" src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" alt="" />
+                        }
+                        @recipient.FullName
+
+
+                      </td>
+                    }
+
+
+
+                    @if (sender != null)
+                    {
+                      <td>
+                        @if (sender.AvatarFileData != null)
+                        {
+                          <img class="rounded-circle" style=" width:15px;height:15px;" src="data:image/*;base64,@(Convert.ToBase64String(sender.AvatarFileData))" alt="" />
+                        }
+                        else
+                        {
+                          <img class="rounded-circle" style=" width:30px;height:30px;" src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" alt="" />
+                        }
+                        @sender.FullName
+
+
+                      </td>
+                    }
+
+                    <td>
+                      <a asp-action="Edit" asp-route-id="@notification.Id">Edit</a> |
+                      <a asp-action="Details" asp-route-id="@notification.Id">Details</a> |
+                      <a asp-action="Delete" asp-route-id="@notification.Id">Delete</a>
+                    </td>
+
+
+
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

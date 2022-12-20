@@ -1,8 +1,10 @@
 ﻿@model TheBugTracker.Models.ViewModels.AssignPMViewModel
 
+@using TheBugTracker.Services.Interfaces
 
-@{ 
-    ViewData["Title"] = "Assign PM";
+@inject IBTProjectService ProjectService
+@{
+  ViewData["Title"] = "Assign PM";
 }
 
 
@@ -22,9 +24,20 @@
       <h2>@Model.Project.Name</h2>
 
       <p>@Model.Project.Description</p>
+      @if (Model.PMID != null)
+      {
+        BTUser projectManager = await ProjectService.GetProjectManagerAsync(Model.Project.Id);
+
+      <p><strong>Current Project Manager is @projectManager.FullName</strong></p>
+      }
+      else
+      {
+        <p>No Project Manager Assigned</p>
+
+      }
 
       <div class="form-group">
-        <label class="custom-control-label">Select Project Manager</label>
+        <label class="custom-control-label">Select New Project Manager</label>
         <select asp-for="PMID" class="form-control" asp-items="@Model.PMList">
           <option></option>
         </select>

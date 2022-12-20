@@ -5,6 +5,7 @@
 
 @inject UserManager<BTUser> UserManager
 @inject IBTRolesService RolesService
+@inject IBTNotificationService NotificationService
 
 
 @{
@@ -17,8 +18,7 @@ List<BTUser> usersDev = await RolesService.GetUsersInRoleAsync("Developer", comp
 List<BTUser> projectManagers = await RolesService.GetUsersInRoleAsync("ProjectManager", companyId);
 List<BTUser> admins = await RolesService.GetUsersInRoleAsync("Admin", companyId);
 @*Add Notification Functionality*@
-
-
+List<Notification> notifications = await NotificationService.GetReceivedNotificationsAsync(btUser.Id);
 
 }
 
@@ -175,7 +175,7 @@ List<BTUser> admins = await RolesService.GetUsersInRoleAsync("Admin", companyId)
                 <span class="text-center">
                   Notifications
                   <br>
-                  <p class="font-weight-bolder">0</p>
+                  <p class="font-weight-bolder">@notifications.Count</p>
                 </span>
                 <hr class="bg-black">
               </div>
