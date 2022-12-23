@@ -32,7 +32,7 @@
                   <div class="form-group mt-3">
                     <input type="submit" value="Assign" class="btn btn-primary" />
                   </div>
-                  <a class="btn btn-primary text-white"> Manage Team</a>
+                  <a asp-controller="Projects" asp-action="AssignMembers" asp-route-id="@Model.Ticket.ProjectId" class="btn btn-primary text-white"> Manage Team</a>
                 </div>
               </div>
             }

@@ -124,6 +124,7 @@ namespace TheBugTracker.Services
 
     #endregion
 
+    #region Validate Invite Code
     public async Task<bool> ValidateInviteCodeAsync(Guid? token)
     {
       if (token == null)
@@ -152,6 +153,7 @@ namespace TheBugTracker.Services
       return result;
 
     }
-  
+
+    #endregion
   }
 }

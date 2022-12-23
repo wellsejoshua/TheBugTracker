@@ -44,7 +44,7 @@ namespace TheBugTracker.Models
     [DisplayName("Invitee Last Name")]
     public string InviteeLastName { get; set; }
 
-    //for record keeping to determine if invite is still valid
+    //for record keeping to determine if invite is still valid it is a flag(true or false)
     [DisplayName("Is Invite Valid")]
     public bool IsValid { get; set; }
 
