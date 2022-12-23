@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -22,15 +23,17 @@ namespace TheBugTracker.Controllers
     private readonly ApplicationDbContext _context;
     private readonly UserManager<BTUser> _userManager;
     private readonly IBTCompanyInfoService _companyService;
+    private readonly IEmailSender _emailSender;
 
     #endregion
 
     #region Constructor
-    public InvitesController(ApplicationDbContext context, UserManager<BTUser> userManager, IBTCompanyInfoService companyService)
+    public InvitesController(ApplicationDbContext context, UserManager<BTUser> userManager, IBTCompanyInfoService companyService, IEmailSender emailSender)
     {
       _context = context;
       _userManager = userManager;
       _companyService = companyService;
+      _emailSender = emailSender;
     }
     #endregion
 
@@ -103,6 +106,10 @@ namespace TheBugTracker.Controllers
         invite.CompanyToken = guid;
         _context.Add(invite);
         await _context.SaveChangesAsync();
+        Company inviteCompany = await _companyService.GetCompanyInfoByIdAsync(invite.CompanyId);
+        string subject = "Welcome to the team!";
+        string message = "Click the link to join our company " + inviteCompany.Name ;
+        await _emailSender.SendEmailAsync(invite.InviteeEmail, subject, message);
         return RedirectToAction(nameof(Index));
       }
 

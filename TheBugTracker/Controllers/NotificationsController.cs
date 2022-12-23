@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -21,16 +22,20 @@ namespace TheBugTracker.Controllers
     private readonly IBTCompanyInfoService _companyService;
     private readonly IBTTicketService _ticketService;
     private readonly UserManager<BTUser> _userManager;
+    private readonly IEmailSender _emailSender;
+    private readonly IBTNotificationService _notificationService;
 
     #endregion
 
     #region Constructor
-    public NotificationsController(ApplicationDbContext context, IBTCompanyInfoService companyService, IBTTicketService ticketService, UserManager<BTUser> userManager)
+    public NotificationsController(ApplicationDbContext context, IBTCompanyInfoService companyService, IBTTicketService ticketService, UserManager<BTUser> userManager, IEmailSender emailSender, IBTNotificationService notificationService)
     {
       _context = context;
       _companyService = companyService;
       _ticketService = ticketService;
       _userManager = userManager;
+      _emailSender = emailSender;
+      _notificationService = notificationService;
     }
     #endregion
 
@@ -38,8 +43,15 @@ namespace TheBugTracker.Controllers
     // GET: Notifications
     public async Task<IActionResult> Index()
     {
-      var applicationDbContext = _context.Notifications.Include(n => n.Recipient).Include(n => n.Sender).Include(n => n.Ticket);
-      return View(await applicationDbContext.ToListAsync());
+      //keep lists seperate for different displays add a filter by company as well before filter by user id
+      BTUser user = await _userManager.GetUserAsync(User);
+      List<Notification> sentNotifications = await _notificationService.GetReceivedNotificationsAsync(user.Id);
+      List<Notification> recievedNotifications = await _notificationService.GetSentNotificationsAsync(user.Id);
+      //come back after adding has been viewed button functionality 
+      var notifications = sentNotifications.Union(recievedNotifications).OrderByDescending(n => n.Created);
+      //var applicationDbContext = _context.Notifications.Include(n => n.Recipient).Include(n => n.Sender).Include(n => n.Ticket);
+      //await applicationDbContext.ToListAsync()
+      return View(notifications);
     }
     #endregion
 
@@ -109,11 +121,23 @@ namespace TheBugTracker.Controllers
     {
       if (ModelState.IsValid)
       {
-        notification.Created = DateTimeOffset.Now;
-        notification.Viewed = false;
-        _context.Add(notification);
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
+        try
+        {
+          notification.Created = DateTimeOffset.Now;
+          notification.Viewed = false;
+          _context.Add(notification);
+          await _context.SaveChangesAsync();
+          //Get email of recipient from their Id
+          BTUser recipient = await _context.Users.FirstOrDefaultAsync(u => u.Id == notification.RecipientId);
+          await _emailSender.SendEmailAsync(recipient.Email, notification.Title, notification.Message);
+          return RedirectToAction(nameof(Index));
+
+        }
+        catch (Exception)
+        {
+
+          throw;
+        }
       }
       ViewData["RecipientId"] = new SelectList(_context.Users, "Id", "Name", notification.RecipientId);
       ViewData["SenderId"] = new SelectList(_context.Users, "Id", "Name", notification.SenderId);
