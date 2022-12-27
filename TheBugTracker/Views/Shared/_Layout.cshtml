@@ -409,7 +409,7 @@
                         <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="ion ion-person"></i> My Profile</a>
                       </div>
                       <div class="col-12 text-left">
-                        <a href="#"><i class="ion ion-email-unread"></i> Inbox</a>
+                        <a href=""><i class="ion ion-email-unread" title="Inbox"></i> Inbox</a>
                       </div>
                       <div role="separator" class="divider col-12"></div>
                       <div class="col-12 text-left">
@@ -417,7 +417,7 @@
                       </div>
                       <div role="separator" class="divider col-12"></div>
                       <div class="col-12 text-left">
-                        <a href="javascript:document.getElementById('logoutForm').submit();"><i class="fa fa-power-off"></i> Logout</a>
+                        <a href="javascript:document.getElementById('logoutForm').submit();" title="Logout"><i class="fa fa-power-off"></i> Logout</a>
                       </div>
                     </div>
                     <!-- /.row -->
@@ -467,10 +467,10 @@
               <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Settings" data-original-title="Settings">
                 <i class="ion ion-gear-b"></i>
               </a>
-              <a href="" class="link" data-toggle="tooltip" title="" data-original-title="Email">
+              <a asp-controller="Notifications" asp-action="Index" class="link" data-toggle="tooltip" title="Notifications Inbox" data-original-title="Email">
                 <i class="ion ion-android-mail"></i>
               </a>
-              <a href="javascript:document.getElementById('logoutForm').submit();" class="link" data-toggle="tooltip" title="" data-original-title="Logout">
+              <a href="javascript:document.getElementById('logoutForm').submit();" class="link" data-toggle="tooltip" title="Logout" data-original-title="Logout">
                 <i class="ion ion-power"></i>
               </a>
             </div>
@@ -725,7 +725,7 @@
   <script src="~/js/template.js"></script>
 
   <!-- Lion_admin dashboard demo (This is only for demo purposes) -->
-  <script src="~/js/dashboard.js"></script>
+  @*<script src="~/js/dashboard.js"></script>*@
 
   @await RenderSectionAsync("Scripts", required: false)
 </body>

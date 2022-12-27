@@ -105,7 +105,7 @@ $(function () {
 			 labels: [
 			"Low",
 			"Medium",
-			"High"
+			"Hi"
 		],
 		datasets: [
 			{

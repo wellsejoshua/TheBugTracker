@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using TheBugTracker.Data;
 using TheBugTracker.Extensions;
 using TheBugTracker.Models;
+using TheBugTracker.Models.ViewModels;
 using TheBugTracker.Services.Interfaces;
 
 namespace TheBugTracker.Controllers
@@ -24,16 +25,20 @@ namespace TheBugTracker.Controllers
     private readonly UserManager<BTUser> _userManager;
     private readonly IBTCompanyInfoService _companyService;
     private readonly IEmailSender _emailSender;
+    private readonly IBTInviteService _inviteService;
+    private readonly IBTProjectService _projectService;
 
     #endregion
 
     #region Constructor
-    public InvitesController(ApplicationDbContext context, UserManager<BTUser> userManager, IBTCompanyInfoService companyService, IEmailSender emailSender)
+    public InvitesController(ApplicationDbContext context, UserManager<BTUser> userManager, IBTCompanyInfoService companyService, IEmailSender emailSender, IBTInviteService inviteService, IBTProjectService projectService)
     {
       _context = context;
       _userManager = userManager;
       _companyService = companyService;
       _emailSender = emailSender;
+      _inviteService = inviteService;
+      _projectService = projectService;
     }
     #endregion
 
@@ -95,7 +100,7 @@ namespace TheBugTracker.Controllers
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,CompanyId,ProjectId,InvitorId,InviteeEmail,InviteeFirstName,InviteeLastName,IsValid")] Invite invite)
+    public async Task<IActionResult> Create([Bind("Id,CompanyId,ProjectId,InvitorId,InviteeEmail,InviteeFirstName,InviteeLastName")] Invite invite)
     {
       if (ModelState.IsValid)
       {
@@ -234,5 +239,25 @@ namespace TheBugTracker.Controllers
       return _context.Invites.Any(e => e.Id == id);
     }
     #endregion
+
+    [AllowAnonymous]
+    [Route("[controller]/[action]")]
+    public async Task<IActionResult> ProcessInvite()
+    {
+      Guid token = new Guid("5f42f7dc-6b3a-4b7e-aae3-560ceeb556eb");
+      //bool tokenValid = false;
+      Invite invite = await _context.Invites.FirstOrDefaultAsync(i => i.CompanyToken == token);
+      Project project = await _projectService.GetProjectByIdAsync(invite.ProjectId, invite.CompanyId);
+      Company company = await _companyService.GetCompanyInfoByIdAsync(invite.CompanyId);
+
+      //await _companyService.GetCompanyInfoByIdAsync();
+      ProcessInviteViewModel model = new();
+      model.Invite = invite;
+      model.ProjectName = project.Name;
+      model.CompanyName = company.Name;
+      model.InvitorName = (_context.Users.FirstOrDefault(u => u.Id == invite.InvitorId)).FullName;
+      
+      return View(model);
+    }
   }
 }

@@ -12,13 +12,13 @@
   Layout = "_Layout";
   ViewData["Title"] = "Dashboard";
   @* Instantiate the btUser *@
-BTUser btUser = await UserManager.GetUserAsync(User);
-int companyId = Model.Company.Id;
-List<BTUser> usersDev = await RolesService.GetUsersInRoleAsync("Developer", companyId);
-List<BTUser> projectManagers = await RolesService.GetUsersInRoleAsync("ProjectManager", companyId);
-List<BTUser> admins = await RolesService.GetUsersInRoleAsync("Admin", companyId);
-@*Add Notification Functionality*@
-List<Notification> notifications = await NotificationService.GetReceivedNotificationsAsync(btUser.Id);
+  BTUser btUser = await UserManager.GetUserAsync(User);
+  int companyId = Model.Company.Id;
+  List<BTUser> usersDev = await RolesService.GetUsersInRoleAsync("Developer", companyId);
+  List<BTUser> projectManagers = await RolesService.GetUsersInRoleAsync("ProjectManager", companyId);
+  List<BTUser> admins = await RolesService.GetUsersInRoleAsync("Admin", companyId);
+  @*Add Notification Functionality*@
+  List<Notification> notifications = await NotificationService.GetReceivedNotificationsAsync(btUser.Id);
 
 }
 
@@ -305,11 +305,11 @@ List<Notification> notifications = await NotificationService.GetReceivedNotifica
         </div>
       </div>
       <!--Ticket Priority Info End -->
-      <!--Tickets By Project Chart-->
+      <!--Projects by Priority Chart-->
       <div class="col-12 rounded mt-2 mb-2">
         <div class="box">
           <div class="box-header with-border">
-            <h3 class="box-title">Tickets By Project</h3>
+            <h3 class="box-title">Projects by Priority</h3>
 
             <div class="box-tools pull-right">
               <button type="button" class="btn btn-box-tool" data-widget="collapse">
@@ -327,11 +327,11 @@ List<Notification> notifications = await NotificationService.GetReceivedNotifica
           </div>
         </div>
       </div>
-      <!--Tickets By Project Chart END-->
+      <!--Projects by Priority Chart END-->
 
 
     </div>
- 
+
     <div class="row gy-2">
       <div class="cols mt-5 bg-secondary">
         <div class="card col m-1 p-2">
@@ -722,9 +722,8 @@ List<Notification> notifications = await NotificationService.GetReceivedNotifica
   });
   </script>-->
   <!-- *** End Chart JS Donut *** -->
-
-    Plotly Charts  
-   Load plotly.js into the DOM 
+  Plotly Charts
+  Load plotly.js into the DOM
   <script src='https://cdn.plot.ly/plotly-2.4.2.min.js'></script>
   <script>
     $.ajax({
@@ -748,6 +747,7 @@ List<Notification> notifications = await NotificationService.GetReceivedNotifica
       }
     });
   </script>
+  <script src="~/js/dashboard.js"></script>
 
 
 }
