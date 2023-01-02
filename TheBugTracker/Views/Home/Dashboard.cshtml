@@ -19,12 +19,19 @@
   List<BTUser> admins = await RolesService.GetUsersInRoleAsync("Admin", companyId);
   @*Add Notification Functionality*@
   List<Notification> notifications = await NotificationService.GetReceivedNotificationsAsync(btUser.Id);
+  @*Chart Counts*@
+  int priorityProjectLow = Model.Projects.Where(p => p.ProjectPriority.Name == "Low").Count();
+  int priorityProjectMedium = Model.Projects.Where(p => p.ProjectPriority.Name == "Medium").Count();
+  int priorityProjectHigh = Model.Projects.Where(p => p.ProjectPriority.Name == "High").Count();
+  int priorityProjectUrgent = Model.Projects.Where(p => p.ProjectPriority.Name == "Urgent").Count();
+
 
 }
 
 
 
 <h1>Dashboard</h1>
+<h1>@priorityProjectLow</h1>
 <a href="javascript:void(0);">
   @if (btUser?.AvatarFileData != null)
   {
@@ -306,7 +313,30 @@
       </div>
       <!--Ticket Priority Info End -->
       <!--Projects by Priority Chart-->
-      <div class="col-12 rounded mt-2 mb-2">
+      <div class=" col-12 col-md-4 rounded mt-2 mb-2">
+        <div class="box">
+          <div class="box-header with-border">
+            <h3 class="box-title">Projects by Tickets</h3>
+
+            <div class="box-tools pull-right">
+              <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+              </button>
+              <button type="button" class="btn btn-box-tool" data-widget="remove">
+                <i class="fa fa-times"></i>
+              </button>
+            </div>
+          </div>
+          <div class="box-body">
+            <div class="chart">
+              <canvas id="chart_task" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--Projects by Priority Chart END-->
+      <!--Projects by Priority Chart-->
+      <div class="col-12 col-md-4 rounded mt-2 mb-2">
         <div class="box">
           <div class="box-header with-border">
             <h3 class="box-title">Projects by Priority</h3>
@@ -322,7 +352,30 @@
           </div>
           <div class="box-body">
             <div class="chart">
-              <canvas id="chart_risk" height="350"></canvas>
+              <canvas id="chart_risk" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--Projects by Priority Chart END-->
+      <!--Play Chart-->
+      <div class="col-12 col-md-4 rounded mt-2 mb-2">
+        <div class="box">
+          <div class="box-header with-border">
+            <h3 class="box-title">Play Chart</h3>
+
+            <div class="box-tools pull-right">
+              <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+              </button>
+              <button type="button" class="btn btn-box-tool" data-widget="remove">
+                <i class="fa fa-times"></i>
+              </button>
+            </div>
+          </div>
+          <div class="box-body">
+            <div class="chart">
+              <canvas id="myChart" height="300"></canvas>
             </div>
           </div>
         </div>
@@ -747,8 +800,293 @@
       }
     });
   </script>
-  <script src="~/js/dashboard.js"></script>
+  @*<script src="~/js/dashboard.js"></script>*@
+  <script>
 
+
+
+    $(function () {
+
+      'use strict';
+
+      // Make the dashboard widgets sortable Using jquery UI
+      $('.connectedSortable').sortable({
+        placeholder: 'sort-highlight',
+        connectWith: '.connectedSortable',
+        handle: '.box-header, .nav-tabs',
+        forcePlaceholderSize: true,
+        zIndex: 999999
+      });
+      $('.connectedSortable .box-header, .connectedSortable .nav-tabs-custom').css('cursor', 'move');
+
+
+      // Morris-chart
+
+      if ($('#morris_bar_chart').length > 0)
+        // Morris bar chart
+        Morris.Bar({
+          element: 'morris_bar_chart',
+          data: [{
+            y: '2018',
+            a: 100,
+            b: 90,
+            c: 60,
+            f: 40
+          }],
+          xkey: 'y',
+          ykeys: ['a', 'b', 'c', 'f'],
+          labels: ['A', 'B', 'C', 'F'],
+          barColors: ['#ef5350', '#e9ab2e', '#398bf7', '#00c292'],
+          barOpacity: 0.6,
+          hideHover: 'auto',
+          grid: false,
+          resize: true,
+          barGap: 7,
+          gridTextColor: '#878787',
+          gridTextFamily: "Poppins"
+        });
+
+      //// chartjs
+      //if ($('#chart_task').length > 0) {
+      //  var ctx6 = document.getElementById("chart_task").getContext("2d");
+      //  var data6 = {
+      //    labels: [
+      //      "Completed",
+      //      "Delayed",
+      //      "Overdue"
+      //    ],
+      //    datasets: [
+      //      {
+      //        data: [200, 90, 150, 90],
+      //        backgroundColor: [
+      //          "#fec107",
+      //          "#00c292",
+      //          "#03a9f3",
+      //        ],
+      //        hoverBackgroundColor: [
+      //          "rgba(254, 193, 7, 0.6)",
+      //          "rgba(0, 194, 146, 0.6)",
+      //          "rgba(3, 169, 243, 0.6)",
+      //        ]
+      //      }]
+      //  };
+
+      //  var pieChart = new Chart(ctx6, {
+      //    type: 'pie',
+      //    data: data6,
+      //    options: {
+      //      animation: {
+      //        duration: 3000
+      //      },
+      //      responsive: true,
+      //      maintainAspectRatio: false,
+      //      legend: {
+      //        labels: {
+      //          fontFamily: "Poppins",
+      //          fontColor: "#878787"
+      //        }
+      //      },
+      //      tooltip: {
+      //        backgroundColor: 'rgba(33,33,33,1)',
+      //        cornerRadius: 0,
+      //        footerFontFamily: "'Poppins'"
+      //      },
+      //      elements: {
+      //        arc: {
+      //          borderWidth: 0
+      //        }
+      //      }
+      //    }
+      //  });
+      //}
+
+
+      // chartjs
+      if ($('#chart_task').length > 0) {
+        var ctx6 = document.getElementById("chart_task").getContext("2d");
+        var data6 = {
+          labels: [
+
+            "Completed",
+            "Delayed",
+            "Overdue"
+          ],
+          datasets: [
+            {
+              data: [200, 90, 150, 90],
+              backgroundColor: [
+                "#fec107",
+                "#00c292",
+                "#03a9f3",
+              ],
+              hoverBackgroundColor: [
+                "rgba(254, 193, 7, 0.6)",
+                "rgba(0, 194, 146, 0.6)",
+                "rgba(3, 169, 243, 0.6)",
+              ]
+            }]
+        };
+
+        var pieChart = new Chart(ctx6, {
+          type: 'pie',
+          data: data6,
+          options: {
+            animation: {
+              duration: 3000
+            },
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {
+              labels: {
+                fontFamily: "Poppins",
+                fontColor: "#878787"
+              }
+            },
+            tooltip: {
+              backgroundColor: 'rgba(33,33,33,1)',
+              cornerRadius: 0,
+              footerFontFamily: "'Poppins'"
+            },
+            elements: {
+              arc: {
+                borderWidth: 0
+              }
+            }
+          }
+        });
+      }
+
+
+
+
+
+
+      if ($('#chart_risk').length > 0) {
+        var ctx7 = document.getElementById("chart_risk").getContext("2d");
+        var data7 = {
+          labels: [
+            "Low",
+            "Medium",
+            "High",
+            "Urgent"
+          ],
+          datasets: [
+            {
+              data: [@priorityProjectLow, @priorityProjectMedium, @priorityProjectHigh, @priorityProjectUrgent],
+              backgroundColor: [
+                "#00c292",
+                "#03a9f3",
+                "#ab8ce4",
+                "#fb9678"
+              ],
+              hoverBackgroundColor: [
+                "rgb(0, 194, 146, 0.6)",
+                "rgba(3, 169, 243, 0.6)",
+                "rgba(171, 140, 228, 0.6)",
+                "rgba(251, 150, 120, 0.6)"
+              ]
+            }]
+        };
+
+        var doughnutChart = new Chart(ctx7, {
+          type: 'doughnut',
+          data: data7,
+          options: {
+            animation: {
+              duration: 2000
+            },
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {
+              labels: {
+                fontFamily: "Poppins",
+                fontColor: "#878787"
+              }
+            },
+            elements: {
+              arc: {
+                borderWidth: 0
+              }
+            },
+            tooltip: {
+              backgroundColor: 'rgba(33,33,33,1)',
+              cornerRadius: 0,
+              footerFontFamily: "'Poppins'"
+            }
+          }
+        });
+      }
+
+
+
+      if ($('#ct_chart_2').length > 0) {
+        new Chartist.Line('#ct_chart_2', {
+          labels: [1, 2, 3, 4, 5],
+          series: [
+            [1, 5, 10, 0, 1],
+            [10, 15, 0, 1, 2]
+          ]
+        }, {
+          // Remove this configuration to see that chart rendered with cardinal spline interpolation
+          // Sometimes, on large jumps in data values, it's better to use simple smoothing.
+          lineSmooth: Chartist.Interpolation.simple({
+            divisor: 2
+          }),
+          fullWidth: true,
+          chartPadding: {
+            right: 20
+          },
+          low: 0
+        });
+      }
+
+
+
+
+
+    }); // End of use strict
+
+
+  </script>
+
+  <canvas id="myChart" width="400" height="400"></canvas>
+  <script>
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+          label: '# of Votes',
+          data: [12, 19, 3, 5, 2, 3],
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
 
 }
 

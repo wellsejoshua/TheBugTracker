@@ -17,7 +17,7 @@ using TheBugTracker.Services.Interfaces;
 namespace TheBugTracker.Controllers
 {
   //filter a list of only one item of btuser in order to change code in future if I want others to be able to send invites on the admins behalf. For now lock down for only admins and no project managers
-  [Authorize(Roles ="Admin")]
+  [Authorize(Roles = "Admin")]
   public class InvitesController : Controller
   {
     #region Properties
@@ -83,13 +83,16 @@ namespace TheBugTracker.Controllers
       List<BTUser> invitor = new();
       int companyId = User.Identity.GetCompanyId().Value;
       List<Company> company = new();
+      List<Project> projectList = await _projectService.GetAllProjectsByCompanyAsync(companyId);
       company.Add(await _companyService.GetCompanyInfoByIdAsync(companyId));
-      
       invitor.Add((await _userManager.GetUserAsync(User)));
+      
+
       ViewData["CompanyId"] = new SelectList(company, "Id", "Name");
-      ViewData["InviteeId"] = new SelectList(_context.Users, "Id", "FullName");
+      //ViewData["InviteeId"] = new SelectList(_context.Users, "Id", "FullName");
       ViewData["InvitorId"] = new SelectList(invitor, "Id", "FullName");
-      ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
+      //ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
+      ViewData["ProjectId"] = new SelectList(projectList, "Id", "Name");
       return View();
     }
     #endregion
@@ -112,8 +115,9 @@ namespace TheBugTracker.Controllers
         _context.Add(invite);
         await _context.SaveChangesAsync();
         Company inviteCompany = await _companyService.GetCompanyInfoByIdAsync(invite.CompanyId);
+        string url = CreateUrl(guid, invite.CompanyId, invite.InviteeEmail);
         string subject = "Welcome to the team!";
-        string message = "Click the link to join our company " + inviteCompany.Name ;
+        string message = "Click the link to join our company " + inviteCompany.Name + " " + url;
         await _emailSender.SendEmailAsync(invite.InviteeEmail, subject, message);
         return RedirectToAction(nameof(Index));
       }
@@ -240,24 +244,87 @@ namespace TheBugTracker.Controllers
     }
     #endregion
 
+    #region Private Create Url 
+    private static string CreateUrl(Guid inviteId, int companyId, string email)
+    {
+      string url = string.Format("https://localhost:44371/Invites/ProcessInvite?inviteId={0}&companyId={1}&email={2}", inviteId.ToString(), "1", email);
+      return url;
+    }
+    #endregion
+
+
+
+    private static string StripUrlStartTag(string url)
+    {
+      var x = url[0];
+      var striptUrl = url[1..];
+      return striptUrl;
+
+    }
+
+    private static string[] ProcessUrl(string url)
+    {
+      string[] properties = url.Split("&");
+      string inviteId = (properties[0].Split("="))[1];
+      string companyId = (properties[1].Split("="))[1];
+      string email = (properties[2].Split("="))[1];
+      //Guid token = new Guid(inviteId);
+      string[] array = new string[3];
+      array[0] = inviteId;
+      array[1] = email;
+      array[2] = companyId;
+
+      return array;
+
+    }
+
     [AllowAnonymous]
     [Route("[controller]/[action]")]
     public async Task<IActionResult> ProcessInvite()
     {
-      Guid token = new Guid("5f42f7dc-6b3a-4b7e-aae3-560ceeb556eb");
-      //bool tokenValid = false;
-      Invite invite = await _context.Invites.FirstOrDefaultAsync(i => i.CompanyToken == token);
-      Project project = await _projectService.GetProjectByIdAsync(invite.ProjectId, invite.CompanyId);
-      Company company = await _companyService.GetCompanyInfoByIdAsync(invite.CompanyId);
+      try
+      {
+        //string url = HttpContext.Request.Host.Value;
+        string url = HttpContext.Request.QueryString.Value;
+        if (url.StartsWith("?"))
+        {
+          url = StripUrlStartTag(url);
+        }
+        var processed = ProcessUrl(url);
+
+        //Guid token = new Guid("5f42f7dc-6b3a-4b7e-aae3-560ceeb556eb");
+        ////bool tokenValid = false;
+        //Invite invite = await _context.Invites.FirstOrDefaultAsync(i => i.CompanyToken == token);
+        string st = processed[0];
+        Guid token = new Guid(processed[0]);
+        int companyId = Int32.Parse(processed[2]);
+        bool isInvite = await _inviteService.AnyInviteAsync(token, processed[1], companyId);
+        Invite invite = new();
+        Project project = new();
+        Company company = new();
+
+        invite = await _inviteService.GetInviteAsync(token, processed[1], companyId);
+        company = await _companyService.GetCompanyInfoByIdAsync(invite.CompanyId);
+        project = await _projectService.GetProjectByIdAsync(invite.ProjectId, invite.CompanyId);
+        Project tryProject = _context.Projects.FirstOrDefault(p => p.CompanyId == companyId && p.Id == invite.ProjectId);
+        ProcessInviteViewModel model = new();
+        model.Invite = invite;
+        //model.ProjectName = project.Name;
+        model.CompanyName = company.Name;
+        model.InvitorName = (_context.Users.FirstOrDefault(u => u.Id == invite.InvitorId)).FullName;
+        model.ProjectName = project.Name;
+        return View(model);
+      }
+      catch (Exception)
+      {
+
+        throw;
+      }
+
 
       //await _companyService.GetCompanyInfoByIdAsync();
-      ProcessInviteViewModel model = new();
-      model.Invite = invite;
-      model.ProjectName = project.Name;
-      model.CompanyName = company.Name;
-      model.InvitorName = (_context.Users.FirstOrDefault(u => u.Id == invite.InvitorId)).FullName;
-      
-      return View(model);
+
+
     }
   }
 }

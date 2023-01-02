@@ -56,7 +56,7 @@ $(function () {
 		],
 		datasets: [
 			{
-				data: [200, 90, 150,70],
+				data: [200, 90, 150,90],
 				backgroundColor: [
 					"#fec107",
 					"#00c292",
@@ -105,7 +105,7 @@ $(function () {
 			 labels: [
 			"Low",
 			"Medium",
-			"Hi"
+			"High"
 		],
 		datasets: [
 			{
