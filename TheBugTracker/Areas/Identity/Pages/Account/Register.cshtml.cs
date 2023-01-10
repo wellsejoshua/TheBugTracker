@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using TheBugTracker.Models;
+using TheBugTracker.Models.ViewModels;
 
 namespace TheBugTracker.Areas.Identity.Pages.Account
 {
@@ -38,6 +39,9 @@ namespace TheBugTracker.Areas.Identity.Pages.Account
     }
 
     [BindProperty]
+
+    //public ProcessInviteViewModel ViewModel { get; set; }
+
     public InputModel Input { get; set; }
 
     public string ReturnUrl { get; set; }
@@ -79,6 +83,7 @@ namespace TheBugTracker.Areas.Identity.Pages.Account
     {
       ReturnUrl = returnUrl;
       ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+      
     }
 
     public async Task<IActionResult> OnPostAsync(string returnUrl = null)

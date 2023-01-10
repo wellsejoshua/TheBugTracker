@@ -2,7 +2,7 @@
 @inject SignInManager<BTUser> SignInManager
 @inject UserManager<BTUser> UserManager
 @{
-  BTUser btUser = await UserManager.GetUserAsync(User);
+    BTUser btUser = await UserManager.GetUserAsync(User);
 }
 
 
@@ -21,32 +21,32 @@
 
 <div class="dropdown py-sm-4 ms-auto ms-sm-0 flex-shrink-1 d-flex justify-content-center">
 
-  @if (SignInManager.IsSignedIn(User))
-  {
-    <a href="#" class="d-flex align-items-center text-dark text-decoration-none">
-      <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" alt="" width="28" height="28" class="rounded-circle">
-      <span class="d-none d-sm-inline mx-1">@btUser.FirstName</span>
-    </a>
-    <ul class="text-small shadow" >
-      <li><a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profile</a></li>
-      <li><a  href="javascript:document.getElementById('logoutForm').submit();">Sign out</a></li>
-    </ul>
+    @if (SignInManager.IsSignedIn(User))
+    {
+      <a href="#" class="d-flex align-items-center text-dark text-decoration-none">
+        <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" alt="" width="28" height="28" class="rounded-circle">
+        <span class="d-none d-sm-inline mx-1">@btUser.FirstName</span>
+      </a>
+      <ul class="text-small shadow">
+        <li><a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profile</a></li>
+        <li><a href="javascript:document.getElementById('logoutForm').submit();">Sign out</a></li>
+      </ul>
 
-  }
-  else
-  {
-    <a asp-area="Identity" asp-page="/Account/Login" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-      
-      <span class="d-none d-sm-inline mx-1">Log In</span>
-    </a>
-    <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-      <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Register</a></li>
-      <li>
-        <hr class="dropdown-divider">
-      </li>
-      <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Login">Sign In</a></li>
-    </ul>
-  }
+    }
+    else
+    {
+      <a asp-area="Identity" asp-page="/Account/Login" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+
+        <span class="d-none d-sm-inline mx-1">Log In</span>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+        <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+        <li>
+          <hr class="dropdown-divider">
+        </li>
+        <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Login">Sign In</a></li>
+      </ul>
+    }
 </div>
 
 

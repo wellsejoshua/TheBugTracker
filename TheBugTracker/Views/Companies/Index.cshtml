@@ -15,42 +15,7 @@
 <h1>Index</h1>
 
 <p>
+    <h1>@Model.Company.Name</h1>
   <a asp-action="Create">Create New</a>
 </p>
-<p>@Model.Tickets.Count()</p>
-<p>@Model.Members.Count()</p>
-@foreach (var vwModel in Model.Tickets)
-{
-  <p>@Html.DisplayFor(vwModel => vwModel.Company.Members)</p>
-}
-<p>@Html.DisplayFor(model => model.Tickets.Count)</p>
-<!--<table class="table">
-  <thead>
-    <tr>
-      <th>
-        @Html.DisplayNameFor(model => model.Tickets)
-      </th>
-      <th>
-        @Html.DisplayNameFor(model => model.Members)
-      </th>
-      <th></th>
-    </tr>
-  </thead>
 
-  <tbody>
-    <tr>
-      <td>
-        @Html.DisplayFor(modelItem => Model.Tickets)
-      </td>
-      <td>
-        @Html.DisplayFor(modelItem => Model.Members)
-      </td>-->
-      @*<td>
-            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-        </td>*@
-    <!--</tr>
-
-  </tbody>
-</table>-->
