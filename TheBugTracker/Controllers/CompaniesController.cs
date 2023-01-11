@@ -18,23 +18,21 @@ namespace TheBugTracker.Controllers
     #region Properties
     private readonly ApplicationDbContext _context;
     private readonly IBTCompanyInfoService _companyInfoService;
-        private readonly IBTCompanyManagement _companyManagement;
 
-        #endregion
+    #endregion
 
-        #region Constructor
-        public CompaniesController(ApplicationDbContext context, IBTCompanyInfoService companyInfoService, IBTCompanyManagement companyManagement)
-        {
-            _context = context;
-            _companyInfoService = companyInfoService;
-            _companyManagement = companyManagement;
-        }
+    #region Constructor
+    public CompaniesController(ApplicationDbContext context, IBTCompanyInfoService companyInfoService)
+    {
+      _context = context;
+      _companyInfoService = companyInfoService;
+    }
 
-        #endregion
+    #endregion
 
-        #region Index
-        // GET: Companies
-        public async Task<IActionResult> Index()
+    #region Index
+    // GET: Companies
+    public async Task<IActionResult> Index()
     {
 
       // show number of members in company by status Dev/Admin/...
