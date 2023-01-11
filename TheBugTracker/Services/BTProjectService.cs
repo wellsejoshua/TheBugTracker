@@ -225,7 +225,7 @@ namespace TheBugTracker.Services
 
     #endregion
 
-    public async Task<List<BTUser>> GetDevelopersOnProjectAsync(int projectId)
+    public Task<List<BTUser>> GetDevelopersOnProjectAsync(int projectId)
     {
       throw new NotImplementedException();
     }
@@ -289,7 +289,7 @@ namespace TheBugTracker.Services
       return members;
     }
 
-    public async Task<List<BTUser>> GetSubmittersOnProjectAsync(int projectId)
+    public Task<List<BTUser>> GetSubmittersOnProjectAsync(int projectId)
     {
       throw new NotImplementedException();
     }

@@ -14,5 +14,6 @@
       @Model.ProjectName project.
     </p>
     <a href="#" class="btn btn-primary">Collaborate</a>
+    <a asp-area="Identity" asp-page="/Account/RegisterByInvite" asp-route-id="@Model.Invite.Id" asp-route-companyId="@Model.Invite.CompanyId" class="btn btn-primary">Accept Invite</a>
   </div>
 </div>
