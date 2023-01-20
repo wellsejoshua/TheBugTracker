@@ -29,7 +29,7 @@ namespace TheBugTracker.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IBTCompanyManagement _companyManagement;
-        private readonly IBTCompanyInfoService _companyInfoService;
+        //private readonly IBTCompanyInfoService _companyInfoService;
         private readonly ApplicationDbContext _context;
         private readonly IBTRolesService _rolesService;
 
